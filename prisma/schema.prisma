@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// タスク進捗ステータス
+enum TaskStatus {
+  未着手
+  進行中
+  完了
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  authUserId String   @unique /// Supabase Auth のユーザー ID
+  userId     String   @unique /// @satogames のようなID
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  projects             Project[]
+  posts                Post[]
+  comments             PostComment[]
+  postStamps           PostStamp[]
+  projectStamps        ProjectStamp[]
+  postFavorites        PostFavorite[]
+  postCommentFavorites PostCommentFavorite[]
+  projectFollows       ProjectFollow[]
+  following            UserFollow[] @relation("UserFollows")
+  followers            UserFollow[] @relation("UserFollowed")
+  muting               Mute[]       @relation("UserMuting")
+  mutedBy              Mute[]       @relation("UserMuted")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  ownerId     Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner   User            @relation(fields: [ownerId], references: [id])
+  tasks   Task[]
+  stamps  ProjectStamp[]
+  follows ProjectFollow[]
+}
+
+model Task {
+  id        Int        @id @default(autoincrement())
+  projectId Int
+  name      String
+  status    TaskStatus
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  posts   Post[]
+
+  @@index([projectId])
+}
+
+model Post {
+  id        Int         @id @default(autoincrement())
+  authorId  Int
+  body      String
+  taskId    Int?        /// 進捗のときだけ。通常は NULL
+  status    TaskStatus? /// 進捗投稿時点のステータス。通常は NULL
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  author   User          @relation(fields: [authorId], references: [id])
+  task     Task?         @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  comments PostComment[]
+  stamps   PostStamp[]
+  favorites PostFavorite[]
+
+  @@index([createdAt])
+  @@index([authorId, createdAt])
+  @@index([taskId, createdAt])
+}
+
+model PostComment {
+  id              Int      @id @default(autoincrement())
+  postId          Int
+  authorId        Int
+  parentCommentId Int?
+  body            String
+  createdAt       DateTime @default(now())
+
+  post     Post                 @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author   User                 @relation(fields: [authorId], references: [id])
+  parent   PostComment?         @relation("CommentReplies", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  replies  PostComment[]        @relation("CommentReplies")
+  favorites PostCommentFavorite[]
+
+  @@index([postId, createdAt])
+  @@index([parentCommentId])
+}
+
+model Stamp {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+
+  postStamps    PostStamp[]
+  projectStamps ProjectStamp[]
+}
+
+model PostStamp {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int
+  stampId   Int
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  post  Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  stamp Stamp @relation(fields: [stampId], references: [id])
+
+  @@unique([userId, postId, stampId])
+}
+
+model ProjectStamp {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  stampId   Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  stamp   Stamp   @relation(fields: [stampId], references: [id])
+
+  @@unique([userId, projectId, stampId])
+}
+
+model PostFavorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+}
+
+model PostCommentFavorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  commentId Int
+  createdAt DateTime @default(now())
+
+  user    User        @relation(fields: [userId], references: [id])
+  comment PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+}
+
+model UserFollow {
+  id         Int      @id @default(autoincrement())
+  followerId Int
+  followeeId Int
+  createdAt  DateTime @default(now())
+
+  follower User @relation("UserFollows", fields: [followerId], references: [id])
+  followee User @relation("UserFollowed", fields: [followeeId], references: [id])
+
+  @@unique([followerId, followeeId])
+}
+
+model ProjectFollow {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+}
+
+model Mute {
+  id          Int      @id @default(autoincrement())
+  muterId     Int
+  mutedUserId Int
+  createdAt   DateTime @default(now())
+
+  muter     User @relation("UserMuting", fields: [muterId], references: [id])
+  mutedUser User @relation("UserMuted", fields: [mutedUserId], references: [id])
+
+  @@unique([muterId, mutedUserId])
+}
