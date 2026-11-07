@@ -1,18 +1,19 @@
+// 全体の共通レイアウト
 "use client";
 
 import "./globals.css";
+import { Providers } from "@/app/providers";
 import type { ReactNode } from "react";
 
-type LayoutProps = {
-  children: ReactNode,
-  className?: string,
+type RootLayoutProps = {
+  children: ReactNode;
 };
 
-export default function RootLayout({ children }: LayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ja">
-      <body className="min-h-screen bg-gray-50 antialiased">
-        <main>{children}</main>
+      <body className="min-h-screen antialiased">
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
