@@ -1,8 +1,8 @@
 // トップ (/)
 "use client";
 
-import { LoadingState } from "@/components/common/LoadingState";
-import { useGuestOnly } from "@/hooks/useGuestOnly";
+import { LoadingState } from "@/app/_components/common/LoadingState";
+import { useGuestOnly } from "./_hooks/useGuestOnly";
 
 export default function TopPage() {
   // ログイン済みユーザーはフックで/homeに遷移させる

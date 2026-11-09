@@ -1,8 +1,8 @@
 // Google認証を実行するボタン
 "use client";
 
-import { Button } from "@/components/common/Button";
-import { useGoogleSignIn } from "@/hooks/useGoogleSignIn";
+import { Button } from "@/app/_components/common/Button";
+import { useGoogleSignIn } from "../_hooks/useGoogleSignIn";
 import { LogIn } from "lucide-react";
 
 type GoogleAuthButtonProps = {

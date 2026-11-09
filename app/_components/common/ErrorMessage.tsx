@@ -1,7 +1,7 @@
 // エラーメッセージを赤いアラートで表示し、必要なら「再読み込み」ボタンを出す共通コンポーネント
 "use client";
 
-import { Button } from "@/components/common/Button";
+import { Button } from "./Button";
 
 type ErrorMessageProps = {
   message: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { buttonClassName } from "@/components/common/Button";
+import { buttonClassName } from "@/app/_components/common/Button";
 import Link from "next/link";
 
 type PublicHeaderProps = {

@@ -2,13 +2,13 @@
 "use client";
 
 import type { CreateUserResponse } from "@/app/api/users/route";
-import { AuthCard } from "@/components/auth/AuthCard";
-import { SignupSteps } from "@/components/auth/SignupSteps";
-import { Button } from "@/components/common/Button";
-import { ErrorMessage } from "@/components/common/ErrorMessage";
-import { FormField } from "@/components/common/FormField";
-import { TextInput } from "@/components/common/TextInput";
-import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/app/_components/common/Button";
+import { ErrorMessage } from "@/app/_components/common/ErrorMessage";
+import { FormField } from "@/app/_components/common/FormField";
+import { TextInput } from "@/app/_components/common/TextInput";
+import { useAuth } from "@/app/_hooks/useAuth";
+import { AuthCard } from "../../_components/AuthCard";
+import { SignupSteps } from "./SignupSteps";
 import { ApiClientError, apiPost } from "@/lib/apiClient";
 import { createUserSchema, type CreateUserFormValues } from "@/lib/validations/user";
 import { zodResolver } from "@hookform/resolvers/zod";

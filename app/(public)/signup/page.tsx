@@ -1,8 +1,8 @@
 // ユーザー登録 (/signup)
 "use client";
 
-import { LoadingState } from "@/components/common/LoadingState";
-import { SignupPageContent } from "@/components/signup/SignupPageContent";
+import { LoadingState } from "@/app/_components/common/LoadingState";
+import { SignupPageContent } from "./_components/SignupPageContent";
 import { Suspense } from "react";
 
 export default function SignupPage() {

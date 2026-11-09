@@ -1,7 +1,7 @@
 // 公開ページのヘッダーあり共通レイアウト (/, /signup, /login)
 "use client";
 
-import { PublicHeader } from "@/components/layout/PublicHeader";
+import { PublicHeader } from "./_components/PublicHeader";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 

@@ -1,9 +1,9 @@
 // ユーザー登録の第1ステップ（Google 認証）画面コンポーネント
 "use client";
 
-import { AuthCard } from "@/components/auth/AuthCard";
-import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
-import { SignupSteps } from "@/components/auth/SignupSteps";
+import { AuthCard } from "../../_components/AuthCard";
+import { GoogleAuthButton } from "../../_components/GoogleAuthButton";
+import { SignupSteps } from "./SignupSteps";
 import Link from "next/link";
 
 export function GoogleAuthStep() {

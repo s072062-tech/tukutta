@@ -2,7 +2,7 @@
 // ログインとプロフィール登録が済んでいるユーザーが対象
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/app/_hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

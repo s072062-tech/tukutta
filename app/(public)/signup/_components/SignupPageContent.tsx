@@ -1,11 +1,11 @@
 // ユーザー登録画面で、認証状態とURLのstepに応じて認証とプロフィール登録のステップを切り替えるコンポーネント
 "use client";
 
-import { LoadingState } from "@/components/common/LoadingState";
-import { GoogleAuthStep } from "@/components/signup/GoogleAuthStep";
-import { ProfileForm } from "@/components/signup/ProfileForm";
-import { useAuth } from "@/hooks/useAuth";
-import { useGuestOnly } from "@/hooks/useGuestOnly";
+import { LoadingState } from "@/app/_components/common/LoadingState";
+import { useAuth } from "@/app/_hooks/useAuth";
+import { useGuestOnly } from "../../_hooks/useGuestOnly";
+import { GoogleAuthStep } from "./GoogleAuthStep";
+import { ProfileForm } from "./ProfileForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 

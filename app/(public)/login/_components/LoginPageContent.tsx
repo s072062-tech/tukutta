@@ -1,10 +1,10 @@
 // ログイン画面でゲスト向けにGoogleログインUIを出し、認証済みならローディング／リダイレクト待ちにするコンポーネント
 "use client";
 
-import { AuthCard } from "@/components/auth/AuthCard";
-import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
-import { LoadingState } from "@/components/common/LoadingState";
-import { useGuestOnly } from "@/hooks/useGuestOnly";
+import { LoadingState } from "@/app/_components/common/LoadingState";
+import { AuthCard } from "../../_components/AuthCard";
+import { GoogleAuthButton } from "../../_components/GoogleAuthButton";
+import { useGuestOnly } from "../../_hooks/useGuestOnly";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 

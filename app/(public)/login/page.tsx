@@ -1,8 +1,8 @@
 // ログイン (/login)
 "use client";
 
-import { LoginPageContent } from "@/components/login/LoginPageContent";
-import { LoadingState } from "@/components/common/LoadingState";
+import { LoadingState } from "@/app/_components/common/LoadingState";
+import { LoginPageContent } from "./_components/LoginPageContent";
 import { Suspense } from "react";
 
 export default function LoginPage() {
