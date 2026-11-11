@@ -18,3 +18,6 @@ export type ApiErrorBody = {
     fieldErrors?: Record<string, string[]>;
   };
 };
+
+// カーソルページングの共通レスポンス
+export type Paginated<T> = { items: T[]; nextCursor: number | null };

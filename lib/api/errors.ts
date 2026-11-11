@@ -106,13 +106,17 @@ function isPrismaCode(error: unknown, code: string) {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === code;
 }
 
-type RouteHandler = (request: Request, context: { params: Promise<unknown> }) => Promise<Response>;
+type RouteContext<P = unknown> = { params: Promise<P> };
+type RouteHandler<P = unknown> = (
+  request: Request,
+  context: RouteContext<P>,
+) => Promise<Response>;
 
 // handler処理の例外をJSONレスポンスに変換
-export function withErrorHandling(handler: RouteHandler): RouteHandler {
+export function withErrorHandling<P = unknown>(handler: RouteHandler<P>): RouteHandler {
   return async (request, context) => {
     try {
-      return await handler(request, context);
+      return await handler(request, context as RouteContext<P>);
     } catch (error) {
       if (error instanceof ApiError) {
         return toResponse(error);

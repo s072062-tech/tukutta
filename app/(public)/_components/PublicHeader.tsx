@@ -1,3 +1,4 @@
+// 公開ページの共通ヘッダーコンポーネント
 "use client";
 
 import { buttonClassName } from "@/app/_components/common/Button";

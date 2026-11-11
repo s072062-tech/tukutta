@@ -51,6 +51,8 @@ model Project {
   tasks   Task[]
   stamps  ProjectStamp[]
   follows ProjectFollow[]
+
+  @@index([ownerId])
 }
 
 model Task {
@@ -126,6 +128,7 @@ model PostStamp {
   stamp Stamp @relation(fields: [stampId], references: [id])
 
   @@unique([userId, postId, stampId])
+  @@index([postId])
 }
 
 model ProjectStamp {
@@ -140,6 +143,7 @@ model ProjectStamp {
   stamp   Stamp   @relation(fields: [stampId], references: [id])
 
   @@unique([userId, projectId, stampId])
+  @@index([projectId])
 }
 
 model PostFavorite {
@@ -152,6 +156,7 @@ model PostFavorite {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
+  @@index([postId])
 }
 
 model PostCommentFavorite {
@@ -176,6 +181,7 @@ model UserFollow {
   followee User @relation("UserFollowed", fields: [followeeId], references: [id])
 
   @@unique([followerId, followeeId])
+  @@index([followeeId])
 }
 
 model ProjectFollow {
@@ -188,6 +194,7 @@ model ProjectFollow {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([userId, projectId])
+  @@index([projectId])
 }
 
 model Mute {
@@ -200,4 +207,5 @@ model Mute {
   mutedUser User @relation("UserMuted", fields: [mutedUserId], references: [id])
 
   @@unique([muterId, mutedUserId])
+  @@index([mutedUserId])
 }
