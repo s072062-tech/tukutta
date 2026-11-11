@@ -28,7 +28,7 @@ export default defineConfig({
           name: "jsdom",
           environment: "jsdom",
           include: ["**/*.test.{ts,tsx}"],
-          exclude: nodeTestGlobs,
+          exclude: ["**/node_modules/**", ...nodeTestGlobs],
         },
       },
       {
@@ -36,6 +36,7 @@ export default defineConfig({
           name: "node",
           environment: "node",
           include: nodeTestGlobs,
+          exclude: ["**/node_modules/**"],
         },
       },
     ],
