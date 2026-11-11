@@ -4,6 +4,13 @@ import { defineConfig } from "vitest/config";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 
+const nodeTestGlobs = [
+  "**/app/api/**/*.test.ts",
+  "**/app/auth/**/*.test.ts",
+  "**/lib/api/**/*.test.ts",
+  "**/lib/validations/**/*.test.ts",
+];
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -12,16 +19,25 @@ export default defineConfig({
     },
   },
   test: {
-    environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
-    include: ["**/*.test.{ts,tsx}"],
-    environmentMatchGlobs: [
-      ["**/app/api/**/*.test.ts", "node"],
-      ["**/app/auth/**/*.test.ts", "node"],
-      ["**/lib/api/**/*.test.ts", "node"],
-      ["**/lib/validations/**/*.test.ts", "node"],
-    ],
     pool: "forks",
     testTimeout: 10000,
+    projects: [
+      {
+        test: {
+          name: "jsdom",
+          environment: "jsdom",
+          include: ["**/*.test.{ts,tsx}"],
+          exclude: nodeTestGlobs,
+        },
+      },
+      {
+        test: {
+          name: "node",
+          environment: "node",
+          include: nodeTestGlobs,
+        },
+      },
+    ],
   },
 });
