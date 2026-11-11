@@ -9,7 +9,8 @@ import { LoadingState } from "@/app/_components/common/LoadingState";
 import { NotFoundState } from "@/app/_components/common/NotFoundState";
 import { Tabs } from "@/app/_components/common/Tabs";
 import { ProfileCard } from "./_components/ProfileCard";
-// import { UserProjectsSection } from "./_components/UserProjectsSection";
+import { UserPostsSection } from "./_components/UserPostsSection";
+import { UserProjectsSection } from "./_components/UserProjectsSection";
 import { useUserProfile } from "./_hooks/useUserProfile";
 import { ApiClientError } from "@/lib/apiClient";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -98,11 +99,9 @@ function UserProfilePageContent() {
       />
       <Tabs items={[...TAB_ITEMS]} activeKey={activeTab} onChange={handleTabChange} />
       {activeTab === "posts" ? (
-        // <UserPostsSection userId={userId} />
-        <div/ >
+        <UserPostsSection userId={userId} />
       ) : (
-        // <UserProjectsSection userId={userId} isSelf={profile.isSelf} />
-        <div/ >
+        <UserProjectsSection userId={userId} isSelf={profile.isSelf} />
       )}
     </div>
   );
