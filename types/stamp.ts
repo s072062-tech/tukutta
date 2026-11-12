@@ -1,8 +1,7 @@
 // スタンプの共通型定義
 
 export type StampSummary = {
-  stampId: number;
-  name: string;
+  emoji: string;
   count: number;
   sentByMe: boolean;
 };
