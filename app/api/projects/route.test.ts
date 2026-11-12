@@ -87,7 +87,9 @@ describe("GET /api/projects", () => {
 
   async function get(query = "") {
     const { GET } = await import("./route");
-    return GET(new Request(`http://localhost:3000/api/projects${query}`));
+    return GET(new Request(`http://localhost:3000/api/projects${query}`), {
+      params: Promise.resolve({}),
+    });
   }
 
   it("全ユーザータブで items / total / nextCursor を返す", async () => {

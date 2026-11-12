@@ -1,12 +1,11 @@
 // プロジェクト一覧をタブ・検索条件付きで取得するフック
 "use client";
 
+import type { AuthStatus } from "@/app/_hooks/useAuth";
 import type { GetProjectsResponse } from "@/app/api/projects/route";
 import type { ProjectCard } from "@/types/project";
 import { ApiClientError } from "@/lib/apiClient";
 import useSWRInfinite from "swr/infinite";
-
-type AuthStatus = "loading" | "guest" | "noProfile" | "ready";
 
 type UseProjectListArgs = {
   tab: "all" | "following";

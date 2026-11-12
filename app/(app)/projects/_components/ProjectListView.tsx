@@ -139,7 +139,7 @@ export function ProjectListView() {
       <div className="mt-6">
         <Tabs
           items={[...TAB_ITEMS]}
-          activeKey={showAuthRedirect && status !== "ready" ? "all" : tab}
+          activeKey={showAuthRedirect ? "all" : tab}
           onChange={handleTabChange}
         />
       </div>
