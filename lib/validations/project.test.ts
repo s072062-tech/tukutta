@@ -1,6 +1,6 @@
-// projectFormSchema の入力検証ユニットテスト
+// projectFormSchema / projectListQuerySchema の入力検証ユニットテスト
 import { PROJECT_DESCRIPTION_MAX, PROJECT_NAME_MAX } from "@/lib/constants";
-import { projectFormSchema } from "@/lib/validations/project";
+import { projectFormSchema, projectListQuerySchema } from "@/lib/validations/project";
 import { describe, expect, it } from "vitest";
 
 describe("projectFormSchema", () => {
@@ -46,5 +46,29 @@ describe("projectFormSchema", () => {
         `概要は${PROJECT_DESCRIPTION_MAX}文字以内で入力してください。`,
       );
     }
+  });
+});
+
+describe("projectListQuerySchema", () => {
+  it("省略と不正な tab は all になる", () => {
+    expect(projectListQuerySchema.parse({}).tab).toBe("all");
+    expect(projectListQuerySchema.parse({ tab: "x" }).tab).toBe("all");
+  });
+
+  it("空白だけの q は undefined になる", () => {
+    expect(projectListQuerySchema.parse({ q: "  " }).q).toBeUndefined();
+  });
+
+  it("上限超過の q と不正な cursor は失敗する", () => {
+    expect(
+      projectListQuerySchema.safeParse({ q: "あ".repeat(PROJECT_NAME_MAX + 1) }).success,
+    ).toBe(false);
+    expect(projectListQuerySchema.safeParse({ cursor: "abc" }).success).toBe(false);
+  });
+
+  it("following と cursor を受け付ける", () => {
+    expect(
+      projectListQuerySchema.parse({ tab: "following", q: "カピ", cursor: "12" }),
+    ).toEqual({ tab: "following", q: "カピ", cursor: 12 });
   });
 });
