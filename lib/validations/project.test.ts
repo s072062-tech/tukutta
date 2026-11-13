@@ -1,6 +1,10 @@
-// projectFormSchema の入力検証ユニットテスト
+// projectFormSchema / projectListQuerySchema の入力検証ユニットテスト
 import { PROJECT_DESCRIPTION_MAX, PROJECT_NAME_MAX } from "@/lib/constants";
-import { projectFormSchema } from "@/lib/validations/project";
+import {
+  journeyQuerySchema,
+  projectFormSchema,
+  projectListQuerySchema,
+} from "@/lib/validations/project";
 import { describe, expect, it } from "vitest";
 
 describe("projectFormSchema", () => {
@@ -46,5 +50,50 @@ describe("projectFormSchema", () => {
         `概要は${PROJECT_DESCRIPTION_MAX}文字以内で入力してください。`,
       );
     }
+  });
+});
+
+describe("projectListQuerySchema", () => {
+  it("省略と不正な tab は all になる", () => {
+    expect(projectListQuerySchema.parse({}).tab).toBe("all");
+    expect(projectListQuerySchema.parse({ tab: "x" }).tab).toBe("all");
+  });
+
+  it("空白だけの q は undefined になる", () => {
+    expect(projectListQuerySchema.parse({ q: "  " }).q).toBeUndefined();
+  });
+
+  it("上限超過の q と不正な cursor は失敗する", () => {
+    expect(
+      projectListQuerySchema.safeParse({ q: "あ".repeat(PROJECT_NAME_MAX + 1) }).success,
+    ).toBe(false);
+    expect(projectListQuerySchema.safeParse({ cursor: "abc" }).success).toBe(false);
+  });
+
+  it("following と cursor を受け付ける", () => {
+    expect(
+      projectListQuerySchema.parse({ tab: "following", q: "カピ", cursor: "12" }),
+    ).toEqual({ tab: "following", q: "カピ", cursor: 12 });
+  });
+});
+
+describe("journeyQuerySchema", () => {
+  it("両方省略は成功する", () => {
+    expect(journeyQuerySchema.parse({})).toEqual({});
+  });
+
+  it("片方だけ・範囲外は失敗する", () => {
+    expect(journeyQuerySchema.safeParse({ year: "2026" }).success).toBe(false);
+    expect(journeyQuerySchema.safeParse({ month: "10" }).success).toBe(false);
+    expect(journeyQuerySchema.safeParse({ year: "2026", month: "13" }).success).toBe(
+      false,
+    );
+  });
+
+  it("両方指定すると数値になる", () => {
+    expect(journeyQuerySchema.parse({ year: "2026", month: "10" })).toEqual({
+      year: 2026,
+      month: 10,
+    });
   });
 });

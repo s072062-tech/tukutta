@@ -1,18 +1,28 @@
-// POST /api/projects の権限・ownerId 固定ユニットテスト
-import { beforeEach, describe, expect, it, vi } from "vitest";
+// GET/POST /api/projects の権限・検証・一覧応答ユニットテスト
 import { ApiError } from "@/lib/api/errors";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const requireUser = vi.fn();
 const projectCreate = vi.fn();
+const projectFindMany = vi.fn();
+const projectCount = vi.fn();
+const toProjectCards = vi.fn();
 
 vi.mock("@/lib/api/auth", () => ({
   requireUser: (...args: unknown[]) => requireUser(...args),
+}));
+
+vi.mock("@/lib/api/projectCard", () => ({
+  projectCardSelect: { id: true },
+  toProjectCards: (...args: unknown[]) => toProjectCards(...args),
 }));
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     project: {
       create: (...args: unknown[]) => projectCreate(...args),
+      findMany: (...args: unknown[]) => projectFindMany(...args),
+      count: (...args: unknown[]) => projectCount(...args),
     },
   },
 }));
@@ -67,5 +77,66 @@ describe("POST /api/projects", () => {
       select: { id: true },
     });
     await expect(response.json()).resolves.toEqual({ project: { id: 99 } });
+  });
+});
+
+describe("GET /api/projects", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  async function get(query = "") {
+    const { GET } = await import("./route");
+    return GET(new Request(`http://localhost:3000/api/projects${query}`), {
+      params: Promise.resolve({}),
+    });
+  }
+
+  it("全ユーザータブで items / total / nextCursor を返す", async () => {
+    const row = {
+      id: 1,
+      name: "カピバラ",
+      description: null,
+      owner: { id: 2, userId: "owner", name: "オーナー" },
+    };
+    projectFindMany.mockResolvedValue([row]);
+    projectCount.mockResolvedValue(1);
+    toProjectCards.mockResolvedValue([
+      {
+        id: 1,
+        name: "カピバラ",
+        description: null,
+        owner: { id: 2, userId: "owner", name: "オーナー" },
+        taskCounts: { total: 0, 未着手: 0, 進行中: 0, 完了: 0 },
+      },
+    ]);
+
+    const response = await get();
+    expect(response.status).toBe(200);
+    expect(requireUser).not.toHaveBeenCalled();
+    await expect(response.json()).resolves.toEqual({
+      items: [
+        {
+          id: 1,
+          name: "カピバラ",
+          description: null,
+          owner: { id: 2, userId: "owner", name: "オーナー" },
+          taskCounts: { total: 0, 未着手: 0, 進行中: 0, 完了: 0 },
+        },
+      ],
+      nextCursor: null,
+      total: 1,
+    });
+  });
+
+  it("未ログインの following は 401 を返す", async () => {
+    requireUser.mockRejectedValue(new ApiError(401, "UNAUTHORIZED", "ログインしてください。"));
+    const response = await get("?tab=following");
+    expect(response.status).toBe(401);
+  });
+
+  it("不正な cursor は 422 を返す", async () => {
+    const response = await get("?cursor=abc");
+    expect(response.status).toBe(422);
   });
 });

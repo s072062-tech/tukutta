@@ -107,27 +107,17 @@ model PostComment {
   @@index([parentCommentId])
 }
 
-model Stamp {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-
-  postStamps    PostStamp[]
-  projectStamps ProjectStamp[]
-}
-
 model PostStamp {
   id        Int      @id @default(autoincrement())
   userId    Int
   postId    Int
-  stampId   Int
+  emoji     String /// 送った絵文字の Unicode（1 絵文字）
   createdAt DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id])
-  post  Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
-  stamp Stamp @relation(fields: [stampId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, postId, stampId])
+  @@unique([userId, postId, emoji])
   @@index([postId])
 }
 
@@ -135,14 +125,13 @@ model ProjectStamp {
   id        Int      @id @default(autoincrement())
   userId    Int
   projectId Int
-  stampId   Int
+  emoji     String /// 送った絵文字の Unicode（1 絵文字）
   createdAt DateTime @default(now())
 
   user    User    @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  stamp   Stamp   @relation(fields: [stampId], references: [id])
 
-  @@unique([userId, projectId, stampId])
+  @@unique([userId, projectId, emoji])
   @@index([projectId])
 }
 

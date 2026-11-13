@@ -21,6 +21,9 @@ export const PROJECT_NAME_MAX = 30;
 // プロジェクト説明の最大文字数
 export const PROJECT_DESCRIPTION_MAX = 300;
 
+// スタンプ絵文字の最大文字数（1 絵文字。ZWJ 結合を許容）
+export const EMOJI_MAX = 32;
+
 // タスク名の最大文字数
 export const TASK_NAME_MAX = 30;
 

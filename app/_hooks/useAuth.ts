@@ -11,6 +11,8 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect } from "react";
 import useSWR from "swr";
 
+export type AuthStatus = "loading" | "guest" | "noProfile" | "ready";
+
 // ログイン状態を status、me(プロフィール)、mutate(再取得関数) で返す
 export function useAuth() {
   const { data, isLoading, mutate } = useSWR<GetMeResponse>("/api/user-self");
@@ -28,7 +30,7 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, [mutate]);
 
-  const status = data ? data.status : isLoading ? "loading" : "guest";
+  const status: AuthStatus = data ? data.status : isLoading ? "loading" : "guest";
   const me: UserSelf | null = data?.status === "ready" ? data.user : null;
 
   return { status, me, mutate };
