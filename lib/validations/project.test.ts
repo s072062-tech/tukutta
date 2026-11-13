@@ -1,6 +1,10 @@
 // projectFormSchema / projectListQuerySchema の入力検証ユニットテスト
 import { PROJECT_DESCRIPTION_MAX, PROJECT_NAME_MAX } from "@/lib/constants";
-import { projectFormSchema, projectListQuerySchema } from "@/lib/validations/project";
+import {
+  journeyQuerySchema,
+  projectFormSchema,
+  projectListQuerySchema,
+} from "@/lib/validations/project";
 import { describe, expect, it } from "vitest";
 
 describe("projectFormSchema", () => {
@@ -70,5 +74,26 @@ describe("projectListQuerySchema", () => {
     expect(
       projectListQuerySchema.parse({ tab: "following", q: "カピ", cursor: "12" }),
     ).toEqual({ tab: "following", q: "カピ", cursor: 12 });
+  });
+});
+
+describe("journeyQuerySchema", () => {
+  it("両方省略は成功する", () => {
+    expect(journeyQuerySchema.parse({})).toEqual({});
+  });
+
+  it("片方だけ・範囲外は失敗する", () => {
+    expect(journeyQuerySchema.safeParse({ year: "2026" }).success).toBe(false);
+    expect(journeyQuerySchema.safeParse({ month: "10" }).success).toBe(false);
+    expect(journeyQuerySchema.safeParse({ year: "2026", month: "13" }).success).toBe(
+      false,
+    );
+  });
+
+  it("両方指定すると数値になる", () => {
+    expect(journeyQuerySchema.parse({ year: "2026", month: "10" })).toEqual({
+      year: 2026,
+      month: 10,
+    });
   });
 });

@@ -36,3 +36,16 @@ export const projectListQuerySchema = z.object({
 });
 
 export type ProjectListQuery = z.output<typeof projectListQuerySchema>;
+
+// 歩みカレンダー用クエリ（year と month は両方省略か両方指定）
+export const journeyQuerySchema = z
+  .object({
+    year: z.coerce.number().int().min(1).max(9999).optional(),
+    month: z.coerce.number().int().min(1).max(12).optional(),
+  })
+  .refine((value) => (value.year === undefined) === (value.month === undefined), {
+    message: "year と month は両方指定してください。",
+    path: ["month"],
+  });
+
+export type JourneyQuery = z.output<typeof journeyQuerySchema>;
