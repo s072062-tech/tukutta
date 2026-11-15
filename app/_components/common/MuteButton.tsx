@@ -2,12 +2,12 @@
 "use client";
 
 import type { MuteUserResponse } from "@/app/api/users/[userId]/mute/route";
+import { revalidatePostLists } from "@/app/(app)/home/_hooks/usePostList";
 import { useLoginGuard } from "@/app/_hooks/useLoginGuard";
 import { Button } from "./Button";
 import { apiDelete, apiPost } from "@/lib/apiClient";
 import { VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSWRConfig } from "swr";
 
 type MuteButtonProps = {
   userId: string;
@@ -18,7 +18,6 @@ type MuteButtonProps = {
 // ミュート状態を表示し、クリックでAPIを呼び出して更新する
 export function MuteButton({ userId, isMuted, onChange }: MuteButtonProps) {
   const { ensureLoggedIn } = useLoginGuard();
-  const { mutate } = useSWRConfig();
   const [muted, setMuted] = useState(isMuted);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -50,11 +49,7 @@ export function MuteButton({ userId, isMuted, onChange }: MuteButtonProps) {
         : await apiPost<MuteUserResponse>(`/api/users/${encodeURIComponent(userId)}/mute`);
       setMuted(result.isMuted);
       onChange?.(result);
-      await mutate(
-        (key) => typeof key === "string" && key.startsWith("/api/posts"),
-        undefined,
-        { revalidate: true },
-      );
+      await revalidatePostLists();
     } catch {
       setErrorMessage("ミュートを更新できませんでした。");
     } finally {
