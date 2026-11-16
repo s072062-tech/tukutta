@@ -1,6 +1,8 @@
 // 投稿詳細のコメント1件と返信ツリーを再帰表示する共通コンポーネント
 "use client";
 
+import type { CommentFavoriteResponse } from "@/app/api/comments/[commentId]/favorite/route";
+import { CommentFavoriteButton } from "@/app/(app)/posts/[postId]/_components/CommentFavoriteButton";
 import { formatLongDateTime } from "@/lib/format";
 import type { CommentNode } from "@/types/comment";
 import { Avatar } from "./Avatar";
@@ -11,12 +13,19 @@ type CommentItemProps = {
   depth: number;
   onReply: (parentCommentId: number) => void;
   onDelete?: (commentId: number) => void;
+  onFavoriteChange?: (commentId: number, result: CommentFavoriteResponse) => void;
 };
 
 const MAX_INDENT_DEPTH = 3;
 
-// アバター・作者・日時・本文・返信／削除を描画し、replies を再帰する
-export function CommentItem({ comment, depth, onReply, onDelete }: CommentItemProps) {
+// アバター・作者・日時・本文・返信／削除・お気に入りを描画し、replies を再帰する
+export function CommentItem({
+  comment,
+  depth,
+  onReply,
+  onDelete,
+  onFavoriteChange,
+}: CommentItemProps) {
   const indentLevel = Math.min(depth, MAX_INDENT_DEPTH);
   const paddingLeft = indentLevel * 16;
 
@@ -37,7 +46,7 @@ export function CommentItem({ comment, depth, onReply, onDelete }: CommentItemPr
             </time>
           </div>
           <p className="mt-1 whitespace-pre-wrap text-sm text-[#1C2B2E]">{comment.body}</p>
-          <div className="mt-2 flex items-center gap-3">
+          <div className="mt-2 flex flex-wrap items-center gap-3">
             <button
               type="button"
               className="text-xs font-medium text-[#0F6E6B] hover:underline"
@@ -54,6 +63,11 @@ export function CommentItem({ comment, depth, onReply, onDelete }: CommentItemPr
                 削除
               </button>
             ) : null}
+            <CommentFavoriteButton
+              commentId={comment.id}
+              isFavorited={comment.isFavorited}
+              onChange={(result) => onFavoriteChange?.(comment.id, result)}
+            />
           </div>
         </div>
       </article>
@@ -64,6 +78,7 @@ export function CommentItem({ comment, depth, onReply, onDelete }: CommentItemPr
           depth={depth + 1}
           onReply={onReply}
           onDelete={onDelete}
+          onFavoriteChange={onFavoriteChange}
         />
       ))}
     </div>

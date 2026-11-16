@@ -1,9 +1,24 @@
 // CommentItem のインデントと返信コールバックテスト
+import "@/test/mocks/navigation";
+import {
+  authState,
+  mockMutate,
+  resetAuthMocks,
+  setAuthState,
+} from "@/test/mocks/auth";
+import { resetNavigationMocks } from "@/test/mocks/navigation";
 import { renderWithProviders } from "@/test/renderWithProviders";
 import type { CommentNode } from "@/types/comment";
 import { fireEvent, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import { CommentItem } from "./CommentItem";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/app/_hooks/useAuth", () => ({
+  useAuth: () => ({
+    status: authState.status,
+    me: authState.me,
+    mutate: mockMutate,
+  }),
+}));
 
 vi.mock("next/link", () => ({
   default: ({
@@ -14,6 +29,8 @@ vi.mock("next/link", () => ({
     href: string;
   }) => <a href={href}>{children}</a>,
 }));
+
+import { CommentItem } from "./CommentItem";
 
 function makeComment(
   id: number,
@@ -33,6 +50,12 @@ function makeComment(
 }
 
 describe("CommentItem", () => {
+  beforeEach(() => {
+    resetAuthMocks();
+    resetNavigationMocks();
+    setAuthState("ready");
+  });
+
   it("返信を3段までインデントして表示する", () => {
     const tree = makeComment(1, "ルート", [
       makeComment(2, "返信1", [makeComment(3, "返信2", [makeComment(4, "返信3")])]),
