@@ -16,16 +16,27 @@ type AvatarProps = {
   id: number;
   userId: string;
   size: "sm" | "md" | "lg";
+  /** false のときリンクにしない（行全体がクリック可能な一覧向け） */
+  linked?: boolean;
 };
 
-export function Avatar({ name, id, userId, size }: AvatarProps) {
+export function Avatar({ name, id, userId, size, linked = true }: AvatarProps) {
   const color = AVATAR_COLORS[Math.abs(id) % AVATAR_COLORS.length];
   const initial = Array.from(name)[0] ?? "?";
+  const className = `inline-flex shrink-0 items-center justify-center rounded-full font-medium text-white ${sizeClassName[size]}`;
+
+  if (!linked) {
+    return (
+      <span className={className} style={{ backgroundColor: color }} aria-hidden>
+        {initial}
+      </span>
+    );
+  }
 
   return (
     <Link
       href={`/users/${userId}`}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full font-medium text-white ${sizeClassName[size]}`}
+      className={className}
       style={{ backgroundColor: color }}
       aria-label={`${name}のユーザー情報`}
     >
