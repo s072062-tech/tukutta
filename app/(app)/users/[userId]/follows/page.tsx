@@ -14,7 +14,6 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { useUserProfile } from "../_hooks/useUserProfile";
 import { FollowUserList } from "./_components/FollowUserList";
-import { useFollowList } from "./_hooks/useFollowList";
 
 const TAB_ITEMS = [
   { key: "following", label: "フォロー中" },
@@ -26,7 +25,7 @@ function resolveFollowType(raw: string | null): FollowListType {
   return raw === "followers" ? "followers" : "following";
 }
 
-// プロフィール・一覧取得とタブ／リスト表示
+// プロフィール取得とタブ／リスト表示
 function FollowsPageContent() {
   const params = useParams<{ userId: string }>();
   const searchParams = useSearchParams();
@@ -42,18 +41,6 @@ function FollowsPageContent() {
     mutate: mutateProfile,
   } = useUserProfile(userId);
 
-  const {
-    users,
-    hasMore,
-    isLoading: isListLoading,
-    isLoadingMore,
-    loadMore,
-    error: listError,
-    isNotFound: isListNotFound,
-    mutate: mutateList,
-    updateFollow,
-  } = useFollowList(userId, activeType, Boolean(userId));
-
   if (!userId) {
     return <NotFoundState />;
   }
@@ -62,7 +49,7 @@ function FollowsPageContent() {
     return <LoadingState variant="page" />;
   }
 
-  if (isProfileNotFound || isListNotFound) {
+  if (isProfileNotFound) {
     return <NotFoundState />;
   }
 
@@ -86,19 +73,15 @@ function FollowsPageContent() {
     router.replace(`/users/${userId}/follows?type=${key}`, { scroll: false });
   };
 
-  // フォロー変更を一覧キャッシュに反映し、必要ならプロフィールも再取得する
-  const handleFollowChange = (targetUserId: string, result: FollowUserResponse) => {
-    updateFollow(targetUserId, result);
-    void mutateList();
+  // 自分のプロフィールならフォロー数を再取得する
+  const handleFollowChange = (
+    _targetUserId: string,
+    _result: FollowUserResponse,
+  ) => {
     if (profile.isSelf) {
       void mutateProfile();
     }
   };
-
-  const emptyMessage =
-    activeType === "followers"
-      ? "フォロワーはいません"
-      : "フォロー中のユーザーはいません";
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-8">
@@ -116,27 +99,11 @@ function FollowsPageContent() {
         onChange={handleTabChange}
       />
 
-      {isListLoading ? (
-        <LoadingState variant="list" />
-      ) : listError ? (
-        <ErrorMessage
-          message={
-            listError instanceof ApiClientError
-              ? listError.message
-              : "エラーが発生しました。時間をおいて再度お試しください。"
-          }
-          onRetry={() => void mutateList()}
-        />
-      ) : (
-        <FollowUserList
-          users={users}
-          emptyMessage={emptyMessage}
-          hasMore={hasMore}
-          isLoadingMore={isLoadingMore}
-          onLoadMore={loadMore}
-          onFollowChange={handleFollowChange}
-        />
-      )}
+      <FollowUserList
+        userId={userId}
+        type={activeType}
+        onFollowChange={handleFollowChange}
+      />
     </div>
   );
 }

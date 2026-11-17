@@ -1,4 +1,4 @@
-// フォロー一覧ページの loading / 404 / タブ切替 / 空表示テスト
+// フォロー一覧ページの loading / 404 / タブ切替テスト
 import "@/test/mocks/navigation";
 import {
   mockParams,
@@ -12,14 +12,23 @@ import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const useUserProfile = vi.fn();
-const useFollowList = vi.fn();
 
 vi.mock("../_hooks/useUserProfile", () => ({
   useUserProfile: (...args: unknown[]) => useUserProfile(...args),
 }));
 
-vi.mock("./_hooks/useFollowList", () => ({
-  useFollowList: (...args: unknown[]) => useFollowList(...args),
+vi.mock("./_components/FollowUserList", () => ({
+  FollowUserList: ({
+    userId,
+    type,
+  }: {
+    userId: string;
+    type: string;
+  }) => (
+    <div data-testid="follow-user-list">
+      {userId}:{type}
+    </div>
+  ),
 }));
 
 vi.mock("next/link", () => ({
@@ -43,26 +52,10 @@ const profile = {
   isMuted: false,
 };
 
-function mockList(overrides: Record<string, unknown> = {}) {
-  useFollowList.mockReturnValue({
-    users: [],
-    hasMore: false,
-    isLoading: false,
-    isLoadingMore: false,
-    loadMore: vi.fn(),
-    error: null,
-    isNotFound: false,
-    mutate: vi.fn(),
-    updateFollow: vi.fn(),
-    ...overrides,
-  });
-}
-
 describe("FollowsPage", () => {
   beforeEach(() => {
     resetNavigationMocks();
     useUserProfile.mockReset();
-    useFollowList.mockReset();
     mockParams.userId = "alice";
   });
 
@@ -74,7 +67,6 @@ describe("FollowsPage", () => {
       error: null,
       mutate: vi.fn(),
     });
-    mockList({ isLoading: true });
     renderWithProviders(<FollowsPage />);
     expect(screen.getByLabelText("読み込み中")).toBeInTheDocument();
   });
@@ -87,7 +79,6 @@ describe("FollowsPage", () => {
       error: new ApiClientError(404, "NOT_FOUND", "対象が見つかりません。"),
       mutate: vi.fn(),
     });
-    mockList({ isNotFound: true });
     renderWithProviders(<FollowsPage />);
     expect(screen.getByText("ページが見つかりません")).toBeInTheDocument();
   });
@@ -100,7 +91,6 @@ describe("FollowsPage", () => {
       error: null,
       mutate: vi.fn(),
     });
-    mockList();
     renderWithProviders(<FollowsPage />);
     fireEvent.click(screen.getByRole("tab", { name: "フォロワー" }));
     expect(mockRouter.replace).toHaveBeenCalledWith(
@@ -109,7 +99,7 @@ describe("FollowsPage", () => {
     );
   });
 
-  it("フォロー中が0件なら空メッセージを出す", () => {
+  it("プロフィール取得後は戻るリンクと一覧を出す", () => {
     useUserProfile.mockReturnValue({
       profile,
       isLoading: false,
@@ -117,16 +107,17 @@ describe("FollowsPage", () => {
       error: null,
       mutate: vi.fn(),
     });
-    mockList();
     renderWithProviders(<FollowsPage />);
-    expect(screen.getByText("フォロー中のユーザーはいません")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Alice/ })).toHaveAttribute(
       "href",
       "/users/alice",
     );
+    expect(screen.getByTestId("follow-user-list")).toHaveTextContent(
+      "alice:following",
+    );
   });
 
-  it("type=followers ならフォロワーの空メッセージを出す", () => {
+  it("type=followers なら一覧に followers を渡す", () => {
     mockSearchParams.set("type", "followers");
     useUserProfile.mockReturnValue({
       profile,
@@ -135,9 +126,10 @@ describe("FollowsPage", () => {
       error: null,
       mutate: vi.fn(),
     });
-    mockList();
     renderWithProviders(<FollowsPage />);
-    expect(screen.getByText("フォロワーはいません")).toBeInTheDocument();
+    expect(screen.getByTestId("follow-user-list")).toHaveTextContent(
+      "alice:followers",
+    );
   });
 
   it("不正な type でもフォロー中タブとして扱う", () => {
@@ -149,12 +141,13 @@ describe("FollowsPage", () => {
       error: null,
       mutate: vi.fn(),
     });
-    mockList();
     renderWithProviders(<FollowsPage />);
     expect(screen.getByRole("tab", { name: "フォロー中" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    expect(useFollowList).toHaveBeenCalledWith("alice", "following", true);
+    expect(screen.getByTestId("follow-user-list")).toHaveTextContent(
+      "alice:following",
+    );
   });
 });
