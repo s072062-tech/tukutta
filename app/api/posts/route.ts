@@ -12,6 +12,11 @@ import {
 import { excludeMutedAuthors } from "@/lib/api/mute";
 import { postCardSelect, toPostCard } from "@/lib/api/postCard";
 import { PAGE_SIZE } from "@/lib/constants";
+import {
+  hashtagNameFromQuery,
+  isHashtagQuery,
+  syncPostHashtags,
+} from "@/lib/hashtag";
 import { prisma } from "@/lib/prisma";
 import {
   createPostSchema,
@@ -35,19 +40,37 @@ async function readJson(request: Request) {
   }
 }
 
-// 新着／フォロー／進捗タブと本文検索の投稿一覧
+// 検索語 q を本文部分一致またはハッシュタグ一致の条件にする
+function searchCondition(q: string | undefined): Prisma.PostWhereInput | null {
+  if (!q) {
+    return null;
+  }
+  if (isHashtagQuery(q)) {
+    const name = hashtagNameFromQuery(q);
+    if (!name) {
+      return null;
+    }
+    return { hashtags: { some: { hashtag: { name } } } };
+  }
+  return { body: { contains: q, mode: "insensitive" } };
+}
+
+// 新着／フォロー／進捗／お気に入りタブと本文・#タグ検索の投稿一覧
 export const GET = withErrorHandling(async (request: Request) => {
   const raw = Object.fromEntries(new URL(request.url).searchParams.entries());
   const { tab, q, cursor } = postListQuerySchema.parse(raw);
 
-  const viewer =
-    tab === "following" ? await requireUser() : await getViewer();
+  const needsAuth = tab === "following" || tab === "favorites";
+  const viewer = needsAuth ? await requireUser() : await getViewer();
   const viewerId = viewer?.id ?? null;
 
-  const andConditions: Prisma.PostWhereInput[] = [excludeMutedAuthors(viewerId)];
+  const andConditions: Prisma.PostWhereInput[] = [
+    excludeMutedAuthors(viewerId),
+  ];
 
-  if (q) {
-    andConditions.push({ body: { contains: q, mode: "insensitive" } });
+  const search = searchCondition(q);
+  if (search) {
+    andConditions.push(search);
   }
 
   if (tab === "progress") {
@@ -67,6 +90,30 @@ export const GET = withErrorHandling(async (request: Request) => {
     andConditions.push({ authorId: { in: followeeIds } });
   }
 
+  if (tab === "favorites") {
+    const rows = await prisma.postFavorite.findMany({
+      where: {
+        userId: viewer!.id,
+        post: { AND: andConditions },
+      },
+      orderBy: [{ createdAt: "desc" }, { postId: "desc" }],
+      take: PAGE_SIZE + 1,
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+      select: {
+        id: true,
+        post: { select: postCardSelect(viewerId) },
+      },
+    });
+
+    const hasMore = rows.length > PAGE_SIZE;
+    const pageRows = hasMore ? rows.slice(0, PAGE_SIZE) : rows;
+    const body: GetPostsResponse = {
+      items: pageRows.map((row) => toPostCard(row.post)),
+      nextCursor: hasMore ? pageRows[pageRows.length - 1]!.id : null,
+    };
+    return Response.json(body);
+  }
+
   const rows = await prisma.post.findMany({
     where: { AND: andConditions },
     select: postCardSelect(viewerId),
@@ -84,7 +131,7 @@ export const GET = withErrorHandling(async (request: Request) => {
   return Response.json(body);
 });
 
-// 通常投稿または進捗投稿を作成する
+// 通常投稿または進捗投稿を作成し、ハッシュタグを同期する
 export const POST = withErrorHandling(async (request: Request) => {
   const user = await requireUser();
   const raw = await readJson(request);
@@ -102,68 +149,68 @@ export const POST = withErrorHandling(async (request: Request) => {
 
   const input = createPostSchema.parse(raw);
 
-  let createdId: number;
-
-  if (input.kind === "normal") {
-    const created = await prisma.post.create({
-      data: {
-        authorId: user.id,
-        body: input.body,
-        taskId: null,
-        status: null,
-      },
-      select: { id: true },
-    });
-    createdId = created.id;
-  } else {
-    createdId = await prisma.$transaction(async (tx) => {
-      const task = await tx.task.findUnique({
-        where: { id: input.taskId },
-        select: {
-          id: true,
-          status: true,
-          projectId: true,
-          project: { select: { ownerId: true } },
-        },
-      });
-      if (!task) {
-        throw notFound();
-      }
-      if (task.project.ownerId !== user.id) {
-        throw new ApiError(
-          403,
-          "FORBIDDEN",
-          "自分が登録したプロジェクトのタスクを選んでください。",
-        );
-      }
-      if (task.projectId !== input.projectId) {
-        const message =
-          "選択したタスクは、選択したプロジェクトのタスクではありません。";
-        throw new ApiError(422, "VALIDATION_ERROR", message, {
-          taskId: [message],
-        });
-      }
-
+  const createdId = await prisma.$transaction(async (tx) => {
+    if (input.kind === "normal") {
       const created = await tx.post.create({
         data: {
           authorId: user.id,
           body: input.body,
-          taskId: input.taskId,
-          status: input.status,
+          taskId: null,
+          status: null,
         },
         select: { id: true },
       });
-
-      if (task.status !== input.status) {
-        await tx.task.update({
-          where: { id: task.id },
-          data: { status: input.status },
-        });
-      }
-
+      await syncPostHashtags(tx, created.id, input.body);
       return created.id;
+    }
+
+    const task = await tx.task.findUnique({
+      where: { id: input.taskId },
+      select: {
+        id: true,
+        status: true,
+        projectId: true,
+        project: { select: { ownerId: true } },
+      },
     });
-  }
+    if (!task) {
+      throw notFound();
+    }
+    if (task.project.ownerId !== user.id) {
+      throw new ApiError(
+        403,
+        "FORBIDDEN",
+        "自分が登録したプロジェクトのタスクを選んでください。",
+      );
+    }
+    if (task.projectId !== input.projectId) {
+      const message =
+        "選択したタスクは、選択したプロジェクトのタスクではありません。";
+      throw new ApiError(422, "VALIDATION_ERROR", message, {
+        taskId: [message],
+      });
+    }
+
+    const created = await tx.post.create({
+      data: {
+        authorId: user.id,
+        body: input.body,
+        taskId: input.taskId,
+        status: input.status,
+      },
+      select: { id: true },
+    });
+    await syncPostHashtags(tx, created.id, input.body);
+
+    if (task.status !== input.status) {
+      await tx.task.update({
+        where: { id: task.id },
+        data: { status: input.status },
+      });
+    }
+
+    return created.id;
+  });
 
   const row = await prisma.post.findUniqueOrThrow({
     where: { id: createdId },

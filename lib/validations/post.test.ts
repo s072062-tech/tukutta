@@ -12,6 +12,12 @@ describe("postListQuerySchema", () => {
     expect(postListQuerySchema.safeParse({ tab: "nope" }).success).toBe(false);
   });
 
+  it("favorites を受け付ける", () => {
+    expect(postListQuerySchema.parse({ tab: "favorites" }).tab).toBe(
+      "favorites",
+    );
+  });
+
   it("空白だけの q は undefined になる", () => {
     expect(postListQuerySchema.parse({ q: "  " }).q).toBeUndefined();
   });

@@ -37,14 +37,14 @@ export function PostSearchBox({ query, onSearch }: PostSearchBoxProps) {
             type="search"
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            placeholder="本文のキーワード"
+            placeholder="本文のキーワード、または #タグ"
             className="pl-10"
-            aria-label="本文のキーワード"
+            aria-label="本文のキーワード、または #タグ"
           />
         </div>
       </form>
       <p className="mt-3 text-sm leading-relaxed text-[#6A7B82]">
-        本文の部分一致で検索します。結果は新しい順に表示されます。
+        本文の部分一致、ハッシュタグの一致で検索します。結果は新しい順に表示されます（お気に入りタブはお気に入りした順）。
       </p>
       <p className="mt-2 text-sm leading-relaxed text-[#6A7B82]">
         閲覧・検索はログインなしでも利用できます。

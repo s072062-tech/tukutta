@@ -7,6 +7,11 @@ const projectCreate = vi.fn();
 const projectFindMany = vi.fn();
 const projectCount = vi.fn();
 const toProjectCards = vi.fn();
+const transaction = vi.fn();
+const hashtagUpsert = vi.fn();
+const projectHashtagFindMany = vi.fn();
+const projectHashtagCreateMany = vi.fn();
+const projectHashtagDeleteMany = vi.fn();
 
 vi.mock("@/lib/api/auth", () => ({
   requireUser: (...args: unknown[]) => requireUser(...args),
@@ -24,12 +29,34 @@ vi.mock("@/lib/prisma", () => ({
       findMany: (...args: unknown[]) => projectFindMany(...args),
       count: (...args: unknown[]) => projectCount(...args),
     },
+    $transaction: (...args: unknown[]) => transaction(...args),
   },
 }));
+
+// syncProjectHashtags が触る tx のモックを返す
+function createTx() {
+  return {
+    project: { create: projectCreate },
+    hashtag: { upsert: hashtagUpsert },
+    projectHashtag: {
+      findMany: projectHashtagFindMany,
+      createMany: projectHashtagCreateMany,
+      deleteMany: projectHashtagDeleteMany,
+    },
+  };
+}
 
 describe("POST /api/projects", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    hashtagUpsert.mockResolvedValue({ id: 1 });
+    projectHashtagFindMany.mockResolvedValue([]);
+    projectHashtagCreateMany.mockResolvedValue({ count: 0 });
+    projectHashtagDeleteMany.mockResolvedValue({ count: 0 });
+    transaction.mockImplementation(
+      async (fn: (tx: ReturnType<typeof createTx>) => Promise<{ id: number }>) =>
+        fn(createTx()),
+    );
   });
 
   async function post(body: unknown) {

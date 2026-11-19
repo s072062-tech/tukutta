@@ -17,6 +17,7 @@ const TAB_ITEMS = [
   { key: "latest", label: "新着" },
   { key: "following", label: "フォロー" },
   { key: "progress", label: "進捗" },
+  { key: "favorites", label: "お気に入り" },
 ] as const;
 
 type TimelineProps = {
@@ -36,7 +37,15 @@ function emptyMessage(tab: PostListTab, q: string | null) {
   if (tab === "progress") {
     return "まだ進捗投稿がありません";
   }
+  if (tab === "favorites") {
+    return "お気に入りした投稿はありません";
+  }
   return "まだ投稿がありません";
+}
+
+// ログイン必須タブかどうか
+function isAuthRequiredTab(key: string): key is "following" | "favorites" {
+  return key === "following" || key === "favorites";
 }
 
 // タブ切替と投稿一覧・空／読込／エラーを表示する
@@ -71,7 +80,7 @@ export function Timeline({ tab, q, onTabChange }: TimelineProps) {
   }, [error, mutateAuth, router]);
 
   const showAuthRedirect =
-    tab === "following" &&
+    isAuthRequiredTab(tab) &&
     (status === "loading" || status === "guest" || status === "noProfile");
   const showListLoading = !showAuthRedirect && isLoading && posts.length === 0;
   const showError =
@@ -79,12 +88,17 @@ export function Timeline({ tab, q, onTabChange }: TimelineProps) {
     error.status !== 401 &&
     !(error.status === 403 && error.code === "PROFILE_REQUIRED");
 
-  // フォロータブはログイン必須にし、有効なタブなら親の onTabChange を呼ぶ
+  // フォロー・お気に入りタブはログイン必須にし、有効なタブなら親の onTabChange を呼ぶ
   const handleTabChange = (key: string) => {
-    if (key === "following" && !ensureLoggedIn()) {
+    if (isAuthRequiredTab(key) && !ensureLoggedIn()) {
       return;
     }
-    if (key === "latest" || key === "following" || key === "progress") {
+    if (
+      key === "latest" ||
+      key === "following" ||
+      key === "progress" ||
+      key === "favorites"
+    ) {
       onTabChange(key);
     }
   };

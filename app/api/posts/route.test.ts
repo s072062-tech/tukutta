@@ -12,6 +12,10 @@ const findUniqueOrThrow = vi.fn();
 const findUniqueTask = vi.fn();
 const updateTask = vi.fn();
 const transaction = vi.fn();
+const hashtagUpsert = vi.fn();
+const postHashtagFindMany = vi.fn();
+const postHashtagCreateMany = vi.fn();
+const postHashtagDeleteMany = vi.fn();
 
 vi.mock("@/lib/api/auth", () => ({
   getViewer: (...args: unknown[]) => getViewer(...args),
@@ -53,6 +57,23 @@ vi.mock("@/lib/prisma", () => ({
     $transaction: (...args: unknown[]) => transaction(...args),
   },
 }));
+
+// syncPostHashtags が触る tx のモックを返す
+function createTx() {
+  return {
+    task: {
+      findUnique: findUniqueTask,
+      update: updateTask,
+    },
+    post: { create: createPost },
+    hashtag: { upsert: hashtagUpsert },
+    postHashtag: {
+      findMany: postHashtagFindMany,
+      createMany: postHashtagCreateMany,
+      deleteMany: postHashtagDeleteMany,
+    },
+  };
+}
 
 describe("GET /api/posts", () => {
   beforeEach(() => {
@@ -120,6 +141,14 @@ describe("POST /api/posts", () => {
     vi.clearAllMocks();
     requireUser.mockResolvedValue({ id: 1, userId: "me", name: "自分" });
     findUniqueOrThrow.mockResolvedValue({ id: 99 });
+    hashtagUpsert.mockResolvedValue({ id: 1 });
+    postHashtagFindMany.mockResolvedValue([]);
+    postHashtagCreateMany.mockResolvedValue({ count: 0 });
+    postHashtagDeleteMany.mockResolvedValue({ count: 0 });
+    transaction.mockImplementation(
+      async (fn: (tx: ReturnType<typeof createTx>) => Promise<number>) =>
+        fn(createTx()),
+    );
   });
 
   async function post(body: unknown) {
@@ -156,20 +185,11 @@ describe("POST /api/posts", () => {
   });
 
   it("他人のタスクは 403", async () => {
-    transaction.mockImplementation(async (fn: (tx: unknown) => Promise<number>) => {
-      findUniqueTask.mockResolvedValue({
-        id: 2,
-        status: "未着手",
-        projectId: 10,
-        project: { ownerId: 999 },
-      });
-      return fn({
-        task: {
-          findUnique: findUniqueTask,
-          update: updateTask,
-        },
-        post: { create: createPost },
-      });
+    findUniqueTask.mockResolvedValue({
+      id: 2,
+      status: "未着手",
+      projectId: 10,
+      project: { ownerId: 999 },
     });
 
     const response = await post({
@@ -187,20 +207,11 @@ describe("POST /api/posts", () => {
   });
 
   it("projectId 不一致は 422", async () => {
-    transaction.mockImplementation(async (fn: (tx: unknown) => Promise<number>) => {
-      findUniqueTask.mockResolvedValue({
-        id: 2,
-        status: "未着手",
-        projectId: 10,
-        project: { ownerId: 1 },
-      });
-      return fn({
-        task: {
-          findUnique: findUniqueTask,
-          update: updateTask,
-        },
-        post: { create: createPost },
-      });
+    findUniqueTask.mockResolvedValue({
+      id: 2,
+      status: "未着手",
+      projectId: 10,
+      project: { ownerId: 1 },
     });
 
     const response = await post({
@@ -219,20 +230,11 @@ describe("POST /api/posts", () => {
 
   it("進捗でステータスが同じなら task.update しない", async () => {
     createPost.mockResolvedValue({ id: 99 });
-    transaction.mockImplementation(async (fn: (tx: unknown) => Promise<number>) => {
-      findUniqueTask.mockResolvedValue({
-        id: 2,
-        status: "進行中",
-        projectId: 10,
-        project: { ownerId: 1 },
-      });
-      return fn({
-        task: {
-          findUnique: findUniqueTask,
-          update: updateTask,
-        },
-        post: { create: createPost },
-      });
+    findUniqueTask.mockResolvedValue({
+      id: 2,
+      status: "進行中",
+      projectId: 10,
+      project: { ownerId: 1 },
     });
 
     const response = await post({
