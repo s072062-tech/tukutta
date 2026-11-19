@@ -1,4 +1,4 @@
-// プロジェクト名検索欄（Enter で確定。検索ボタンは置かない）
+// プロジェクト名・#タグ検索欄（Enter で確定。検索ボタンは置かない）
 "use client";
 
 import { TextInput } from "@/app/_components/common/TextInput";
@@ -35,10 +35,10 @@ export function ProjectSearchInput({ value, onChange, onSubmit }: ProjectSearchI
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="プロジェクト名で探す"
+        placeholder="プロジェクト名、または #タグ"
         maxLength={PROJECT_NAME_MAX}
         className="pl-10"
-        aria-label="プロジェクト名で探す"
+        aria-label="プロジェクト名、または #タグ"
       />
     </div>
   );

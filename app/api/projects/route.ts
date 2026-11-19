@@ -6,6 +6,11 @@ import { requireUser } from "@/lib/api/auth";
 import { projectCardSelect, toProjectCards } from "@/lib/api/projectCard";
 import { validationError, withErrorHandling } from "@/lib/api/errors";
 import { PAGE_SIZE } from "@/lib/constants";
+import {
+  hashtagNameFromQuery,
+  isHashtagQuery,
+  syncProjectHashtags,
+} from "@/lib/hashtag";
 import { prisma } from "@/lib/prisma";
 import {
   projectFormSchema,
@@ -42,11 +47,25 @@ export const GET = withErrorHandling(async (request: Request) => {
 
   const user = tab === "following" ? await requireUser() : null;
 
+  const searchWhere: Prisma.ProjectWhereInput | undefined = (() => {
+    if (!q) {
+      return undefined;
+    }
+    if (isHashtagQuery(q)) {
+      const name = hashtagNameFromQuery(q);
+      if (!name) {
+        return undefined;
+      }
+      return { hashtags: { some: { hashtag: { name } } } };
+    }
+    return { name: { contains: q, mode: "insensitive" as const } };
+  })();
+
   const where: Prisma.ProjectWhereInput = {
     ...(tab === "following" && user
       ? { follows: { some: { userId: user.id } } }
       : {}),
-    ...(q ? { name: { contains: q, mode: "insensitive" as const } } : {}),
+    ...searchWhere,
   };
 
   const [rows, total] = await Promise.all([
@@ -88,9 +107,13 @@ export const POST = withErrorHandling(async (request) => {
   }
 
   const { name, description } = projectFormSchema.parse(raw);
-  const created = await prisma.project.create({
-    data: { name, description, ownerId: user.id },
-    select: { id: true },
+  const created = await prisma.$transaction(async (tx) => {
+    const row = await tx.project.create({
+      data: { name, description, ownerId: user.id },
+      select: { id: true },
+    });
+    await syncProjectHashtags(tx, row.id, description);
+    return row;
   });
 
   const body: CreateProjectResponse = { project: { id: created.id } };

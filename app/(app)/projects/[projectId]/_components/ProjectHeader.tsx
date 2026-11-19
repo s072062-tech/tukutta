@@ -3,9 +3,10 @@
 
 import type { FollowProjectResponse } from "@/app/api/projects/[projectId]/follow/route";
 import type { GetProjectResponse } from "@/app/api/projects/[projectId]/route";
+import { buttonClassName } from "@/app/_components/common/Button";
+import { HashtagText } from "@/app/_components/common/HashtagText";
 import { StampBar } from "@/app/_components/common/StampBar";
 import { UserNameLink } from "@/app/_components/common/UserNameLink";
-import { buttonClassName } from "@/app/_components/common/Button";
 import { Gamepad2, Pencil } from "lucide-react";
 import Link from "next/link";
 import { ProjectFollowButton } from "./ProjectFollowButton";
@@ -53,8 +54,11 @@ export function ProjectHeader({
             )}
           </div>
           {detail.project.description ? (
-            <p className="mt-3 whitespace-pre-wrap text-sm text-[#1C2B2E]">
-              {detail.project.description}
+            <p className="mt-3 text-sm text-[#1C2B2E]">
+              <HashtagText
+                text={detail.project.description}
+                linkTo="projects"
+              />
             </p>
           ) : null}
           <p className="mt-3 text-sm text-[#6A7B82]">

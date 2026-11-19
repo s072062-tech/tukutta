@@ -47,10 +47,11 @@ model Project {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  owner   User            @relation(fields: [ownerId], references: [id])
-  tasks   Task[]
-  stamps  ProjectStamp[]
-  follows ProjectFollow[]
+  owner    User             @relation(fields: [ownerId], references: [id])
+  tasks    Task[]
+  stamps   ProjectStamp[]
+  follows  ProjectFollow[]
+  hashtags ProjectHashtag[]
 
   @@index([ownerId])
 }
@@ -78,11 +79,12 @@ model Post {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  author   User          @relation(fields: [authorId], references: [id])
-  task     Task?         @relation(fields: [taskId], references: [id], onDelete: SetNull)
-  comments PostComment[]
-  stamps   PostStamp[]
+  author    User          @relation(fields: [authorId], references: [id])
+  task      Task?         @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  comments  PostComment[]
+  stamps    PostStamp[]
   favorites PostFavorite[]
+  hashtags  PostHashtag[]
 
   @@index([createdAt])
   @@index([authorId, createdAt])
@@ -146,6 +148,7 @@ model PostFavorite {
 
   @@unique([userId, postId])
   @@index([postId])
+  @@index([userId, createdAt])
 }
 
 model PostCommentFavorite {
@@ -197,4 +200,39 @@ model Mute {
 
   @@unique([muterId, mutedUserId])
   @@index([mutedUserId])
+}
+
+model Hashtag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique /// 正規化名。小文字。先頭の # は含めない
+  createdAt DateTime @default(now())
+
+  posts     PostHashtag[]
+  projects  ProjectHashtag[]
+}
+
+model PostHashtag {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  hashtagId Int
+  createdAt DateTime @default(now())
+
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  hashtag Hashtag @relation(fields: [hashtagId], references: [id])
+
+  @@unique([postId, hashtagId])
+  @@index([hashtagId])
+}
+
+model ProjectHashtag {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  hashtagId Int
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  hashtag Hashtag @relation(fields: [hashtagId], references: [id])
+
+  @@unique([projectId, hashtagId])
+  @@index([hashtagId])
 }

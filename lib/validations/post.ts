@@ -4,7 +4,9 @@ import { bodyTextSchema, cursorQuerySchema } from "@/lib/validations/common";
 import { z } from "zod";
 
 export const postListQuerySchema = z.object({
-  tab: z.enum(["latest", "following", "progress"]).default("latest"),
+  tab: z
+    .enum(["latest", "following", "progress", "favorites"])
+    .default("latest"),
   q: z
     .string()
     .trim()

@@ -12,7 +12,12 @@ import { Suspense, useEffect } from "react";
 
 // クエリのtabを有効なタブに正規化し、不正ならlatestにする
 function resolveTab(raw: string | null): PostListTab {
-  if (raw === "following" || raw === "progress" || raw === "latest") {
+  if (
+    raw === "following" ||
+    raw === "progress" ||
+    raw === "latest" ||
+    raw === "favorites"
+  ) {
     return raw;
   }
   return "latest";
@@ -45,7 +50,7 @@ function HomeContent() {
     if (status === "loading") {
       return;
     }
-    if (tab !== "following") {
+    if (tab !== "following" && tab !== "favorites") {
       return;
     }
     if (status === "guest") {

@@ -6,6 +6,7 @@ import type { PostDetail } from "@/app/api/posts/[postId]/route";
 import { Avatar } from "@/app/_components/common/Avatar";
 import { buttonClassName } from "@/app/_components/common/Button";
 import { FavoriteButton } from "@/app/_components/common/FavoriteButton";
+import { HashtagText } from "@/app/_components/common/HashtagText";
 import { StampBar } from "@/app/_components/common/StampBar";
 import { StatusBadge } from "@/app/_components/common/StatusBadge";
 import { UserNameLink } from "@/app/_components/common/UserNameLink";
@@ -107,8 +108,8 @@ export function PostDetailBody({
             ) : null}
 
             {/* 本文 */}
-            <p className="mt-4 whitespace-pre-wrap text-base leading-7 text-[#1C2B2E]">
-              {post.body}
+            <p className="mt-4 text-base leading-7 text-[#1C2B2E]">
+              <HashtagText text={post.body} linkTo="posts" />
             </p>
 
             {/* 投稿日時 */}

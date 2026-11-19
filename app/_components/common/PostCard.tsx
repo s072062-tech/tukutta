@@ -4,6 +4,7 @@
 import type { FavoriteResponse } from "@/app/api/posts/[postId]/favorite/route";
 import { Avatar } from "./Avatar";
 import { FavoriteButton } from "./FavoriteButton";
+import { HashtagText } from "./HashtagText";
 import { StatusBadge } from "./StatusBadge";
 import { UserNameLink } from "./UserNameLink";
 import { formatShortDateTime } from "@/lib/format";
@@ -63,7 +64,9 @@ export function PostCard({ post, onFavoriteChange }: PostCardProps) {
             </div>
           ) : null}
 
-          <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-[#1C2B2E]">{post.body}</p>
+          <p className="mt-3 text-sm leading-6 text-[#1C2B2E]">
+            <HashtagText text={post.body} linkTo="posts" />
+          </p>
 
           <div className="mt-4 flex items-center gap-5">
             <div onClick={(event) => event.stopPropagation()}>

@@ -36,7 +36,8 @@ type UsePostListArgs = {
 
 // tab / q に応じた投稿一覧と、追加読み込み・お気に入り更新を返す
 export function usePostList({ tab, q, status }: UsePostListArgs) {
-  const enabled = tab !== "following" || status === "ready";
+  const enabled =
+    (tab !== "following" && tab !== "favorites") || status === "ready";
 
   // ページ番号と前回レスポンスから次に取る /api/posts のURLを決める
   const getKey = (pageIndex: number, previousPageData: GetPostsResponse | null) => {
