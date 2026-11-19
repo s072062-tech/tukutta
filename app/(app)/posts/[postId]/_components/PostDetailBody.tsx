@@ -62,7 +62,7 @@ export function PostDetailBody({
         onClick={handleBack}
         className="text-sm font-medium text-[#0F6E6B] hover:underline"
       >
-        ← 投稿詳細
+        ← 戻る
       </button>
 
       <div className="rounded-2xl border border-[#DEE7E9] bg-white p-5">
