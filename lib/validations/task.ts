@@ -15,3 +15,10 @@ export const createTaskSchema = z.object({
 
 export type CreateTaskInput = z.input<typeof createTaskSchema>;
 export type CreateTaskValues = z.output<typeof createTaskSchema>;
+
+export const updateTaskSchema = z.object({
+  name: taskNameSchema,
+});
+
+export type UpdateTaskInput = z.input<typeof updateTaskSchema>;
+export type UpdateTaskValues = z.output<typeof updateTaskSchema>;

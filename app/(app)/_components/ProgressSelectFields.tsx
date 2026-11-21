@@ -30,9 +30,9 @@ export type PostFormValues = ProgressFieldValues & {
 
 type ProgressSelectFieldsProps = {
   projects: MyProjectOption[];
-  register: UseFormRegister<PostFormValues>;
-  control: Control<PostFormValues>;
-  errors: FieldErrors<PostFormValues>;
+  register: UseFormRegister<ProgressFieldValues>;
+  control: Control<ProgressFieldValues>;
+  errors: FieldErrors<ProgressFieldValues>;
   disabled: boolean;
   emptyHref: string | null;
   onProjectChange: () => void;

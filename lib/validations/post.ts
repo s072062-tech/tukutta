@@ -40,3 +40,28 @@ export const createPostSchema = z.discriminatedUnion("kind", [
 
 export type CreatePostInput = z.input<typeof createPostSchema>;
 export type CreatePostValues = z.output<typeof createPostSchema>;
+
+export const updatePostSchema = z.object({
+  body: bodyTextSchema(POST_BODY_MAX),
+  projectId: z.number().int().positive().nullish(),
+  taskId: z.number().int().positive().nullish(),
+  status: z.enum(TASK_STATUSES).nullish(),
+});
+
+export const updateProgressPostSchema = z.object({
+  body: bodyTextSchema(POST_BODY_MAX),
+  projectId: z.number().int().positive({
+    error: "プロジェクトを選択してください。",
+  }),
+  taskId: z.number().int().positive({
+    error: "タスクを選択してください。",
+  }),
+  status: z.enum(TASK_STATUSES, {
+    error: "ステータスは未着手、進行中、完了から選択してください。",
+  }),
+});
+
+export type UpdatePostInput = z.input<typeof updatePostSchema>;
+export type UpdatePostValues = z.output<typeof updatePostSchema>;
+export type UpdateProgressPostInput = z.input<typeof updateProgressPostSchema>;
+export type UpdateProgressPostValues = z.output<typeof updateProgressPostSchema>;

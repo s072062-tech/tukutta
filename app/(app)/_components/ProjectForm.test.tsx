@@ -58,4 +58,19 @@ describe("ProjectForm", () => {
     expect(onSubmit).toHaveBeenCalledTimes(1);
     resolveSubmit?.();
   });
+
+  it("title と footer を表示し、左に footer・右に保存ボタンを並べる", () => {
+    renderWithProviders(
+      <ProjectForm
+        title="プロジェクトを編集"
+        submitLabel="保存する"
+        onSubmit={vi.fn()}
+        footer={<button type="button">削除する</button>}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "プロジェクトを編集" })).toBeInTheDocument();
+    const deleteButton = screen.getByRole("button", { name: "削除する" });
+    const saveButton = screen.getByRole("button", { name: "保存する" });
+    expect(deleteButton.compareDocumentPosition(saveButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
 });
