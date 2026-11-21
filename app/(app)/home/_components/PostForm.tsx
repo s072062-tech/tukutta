@@ -9,6 +9,7 @@ import type { MyTaskOption } from "@/app/api/me/projects/route";
 import {
   ProgressSelectFields,
   type PostFormValues,
+  type ProgressFieldValues,
 } from "@/app/(app)/_components/ProgressSelectFields";
 import { useMyProjects } from "@/app/(app)/_hooks/useMyProjects";
 import { revalidatePostLists } from "@/app/(app)/home/_hooks/usePostList";
@@ -28,7 +29,10 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import {
   useForm,
+  type Control,
+  type FieldErrors,
   type Resolver,
+  type UseFormRegister,
   type UseFormSetError,
 } from "react-hook-form";
 import { useSWRConfig } from "swr";
@@ -221,9 +225,9 @@ export function PostForm() {
           ) : (
             <ProgressSelectFields
               projects={projects}
-              register={register}
-              control={control}
-              errors={errors}
+              register={register as unknown as UseFormRegister<ProgressFieldValues>}
+              control={control as unknown as Control<ProgressFieldValues>}
+              errors={errors as FieldErrors<ProgressFieldValues>}
               disabled={selectDisabled}
               emptyHref={emptyHref}
               onProjectChange={handleProjectChange}

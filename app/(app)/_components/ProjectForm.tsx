@@ -18,11 +18,17 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { useForm, type UseFormSetError } from "react-hook-form";
 
+type ProjectFormFooterContext = {
+  isSubmitting: boolean;
+};
+
 type ProjectFormProps = {
+  title?: string;
   submitLabel: string;
   submitIcon?: ReactNode;
   defaultValues?: ProjectFormInput;
   onSubmit: (values: ProjectFormValues) => Promise<void>;
+  footer?: ReactNode | ((ctx: ProjectFormFooterContext) => ReactNode);
 };
 
 // APIのフィールドエラーを react-hook-form の各項目に設定する
@@ -46,10 +52,12 @@ function applyFieldErrors(
 
 // バリデーション付きで入力を受け取り onSubmit を呼ぶ共有フォーム
 export function ProjectForm({
+  title,
   submitLabel,
   submitIcon,
   defaultValues,
   onSubmit,
+  footer,
 }: ProjectFormProps) {
   const router = useRouter();
   const { mutate: mutateAuth } = useAuth();
@@ -98,8 +106,14 @@ export function ProjectForm({
     }
   });
 
+  const footerNode =
+    typeof footer === "function" ? footer({ isSubmitting }) : footer;
+
   return (
     <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
+      {title ? (
+        <h1 className="text-sm font-bold text-[#1C2B2E]">{title}</h1>
+      ) : null}
       <FormField label="プロジェクト名" required htmlFor="project-name" error={errors.name?.message}>
         <TextInput
           id="project-name"
@@ -126,9 +140,18 @@ export function ProjectForm({
           {formError}
         </p>
       ) : null}
-      <Button type="submit" variant="primary" isLoading={isSubmitting} icon={submitIcon}>
-        {submitLabel}
-      </Button>
+      {footerNode ? (
+        <div className="flex items-center justify-between gap-3">
+          {footerNode}
+          <Button type="submit" variant="primary" isLoading={isSubmitting} icon={submitIcon}>
+            {submitLabel}
+          </Button>
+        </div>
+      ) : (
+        <Button type="submit" variant="primary" isLoading={isSubmitting} icon={submitIcon}>
+          {submitLabel}
+        </Button>
+      )}
     </form>
   );
 }

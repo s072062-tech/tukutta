@@ -1,6 +1,11 @@
 // postListQuerySchema / createPostSchema の入力検証ユニットテスト
 import { POST_BODY_MAX } from "@/lib/constants";
-import { createPostSchema, postListQuerySchema } from "@/lib/validations/post";
+import {
+  createPostSchema,
+  postListQuerySchema,
+  updatePostSchema,
+  updateProgressPostSchema,
+} from "@/lib/validations/post";
 import { describe, expect, it } from "vitest";
 
 describe("postListQuerySchema", () => {
@@ -79,5 +84,50 @@ describe("createPostSchema", () => {
         `本文は${POST_BODY_MAX}文字以内で入力してください。`,
       );
     }
+  });
+});
+
+describe("updatePostSchema", () => {
+  it("本文と taskId: null を通す", () => {
+    expect(updatePostSchema.parse({ body: "a", taskId: null })).toEqual({
+      body: "a",
+      taskId: null,
+    });
+  });
+
+  it("空白だけの本文は失敗する", () => {
+    const result = updatePostSchema.safeParse({ body: "  " });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("本文を入力してください。");
+    }
+  });
+});
+
+describe("updateProgressPostSchema", () => {
+  it("taskId 無しでは失敗する", () => {
+    expect(
+      updateProgressPostSchema.safeParse({
+        body: "a",
+        projectId: 1,
+        status: "進行中",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("進捗の完全な入力を受け付ける", () => {
+    expect(
+      updateProgressPostSchema.parse({
+        body: "更新",
+        projectId: 1,
+        taskId: 2,
+        status: "完了",
+      }),
+    ).toEqual({
+      body: "更新",
+      projectId: 1,
+      taskId: 2,
+      status: "完了",
+    });
   });
 });

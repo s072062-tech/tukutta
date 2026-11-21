@@ -1,6 +1,6 @@
 // createTaskSchema の入力検証ユニットテスト
 import { TASK_NAME_MAX } from "@/lib/constants";
-import { createTaskSchema } from "@/lib/validations/task";
+import { createTaskSchema, updateTaskSchema } from "@/lib/validations/task";
 import { describe, expect, it } from "vitest";
 
 describe("createTaskSchema", () => {
@@ -30,5 +30,33 @@ describe("createTaskSchema", () => {
     if (!statusResult.success) {
       expect(statusResult.error.issues[0]?.message).toBe("ステータスを選んでください。");
     }
+  });
+});
+
+describe("updateTaskSchema", () => {
+  it("空の名前は必須エラー", () => {
+    const result = updateTaskSchema.safeParse({ name: "  " });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("タスク名を入力してください。");
+    }
+  });
+
+  it("51文字は文字数エラー", () => {
+    const result = updateTaskSchema.safeParse({
+      name: "あ".repeat(TASK_NAME_MAX + 1),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe(
+        `タスク名は${TASK_NAME_MAX}文字以内で入力してください。`,
+      );
+    }
+  });
+
+  it("status 付きでも成功し出力に status が無い", () => {
+    expect(updateTaskSchema.parse({ name: "a", status: "完了" })).toEqual({
+      name: "a",
+    });
   });
 });
