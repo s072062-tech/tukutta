@@ -26,5 +26,11 @@ export const createUserSchema = z.object({
   userId: userHandleSchema,
 });
 
+// アプリ設定のユーザー名変更用スキーマ（userId は受け取っても無視する）
+export const updateMeSchema = z.object({
+  name: userNameSchema,
+});
+
 // z.infer で型を自動生成し、フォームやAPIの型として使う
 export type CreateUserFormValues = z.infer<typeof createUserSchema>;
+export type UpdateMeFormValues = z.infer<typeof updateMeSchema>;
