@@ -6,7 +6,7 @@ test.describe("login", () => {
   test("guest でログインカードを出す", async ({ page }) => {
     await mockUserSelf(page, "guest");
     await gotoApp(page, "/login");
-    await expect(page.getByRole("heading", { name: "Googleでログイン" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "ログイン" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Googleでログイン" })).toBeVisible();
   });
 
@@ -24,6 +24,6 @@ test.describe("login", () => {
     await expect(
       page.getByText("Google認証に失敗しました。もう一度お試しください。"),
     ).toHaveCount(0);
-    await expect(page.getByRole("heading", { name: "Googleでログイン" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "ログイン" })).toBeVisible();
   });
 });

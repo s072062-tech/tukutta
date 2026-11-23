@@ -50,7 +50,7 @@ describe("LoginPageContent", () => {
   it("guest でログインカードを出す", () => {
     setAuthState("guest");
     renderWithProviders(<LoginPageContent />);
-    expect(screen.getByRole("heading", { name: "Googleでログイン" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "ログイン" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Googleでログイン" })).toBeInTheDocument();
   });
 

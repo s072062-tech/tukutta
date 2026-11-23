@@ -25,7 +25,7 @@ export function LoginPageContent() {
 
   return (
     <AuthCard
-      title="Googleでログイン"
+      title="ログイン"
       description="Googleアカウントでログインします。"
       alert={alert}
       footer={

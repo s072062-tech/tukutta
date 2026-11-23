@@ -68,7 +68,7 @@ export function FavoriteButton({ postId, isFavorited, onChange }: FavoriteButton
           void handleClick();
         }}
         className={clsx(
-          "inline-flex items-center gap-1.5 text-sm disabled:opacity-60",
+          "inline-flex items-center gap-1.5 text-xs disabled:opacity-60",
           favorited ? "text-[#0F6E6B]" : "text-[#6A7B82] hover:text-[#0F6E6B]",
         )}
       >

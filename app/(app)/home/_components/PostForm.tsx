@@ -248,7 +248,7 @@ export function PostForm() {
             <TextArea
               id="post-body"
               rows={4}
-              placeholder="いま作っていることを書く"
+              placeholder="いまなにしてる？"
               hasError={Boolean(errors.body)}
               {...register("body")}
             />
@@ -258,7 +258,7 @@ export function PostForm() {
             <TextArea
               id="post-body"
               rows={4}
-              placeholder="いま作っていることを書く"
+              placeholder="いまなにしてる？"
               hasError={Boolean(errors.body)}
               aria-label="本文"
               {...register("body")}
@@ -276,12 +276,14 @@ export function PostForm() {
         </p>
       ) : null}
 
-      <div className="mt-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-[#6A7B82]">
-          {isProgress
-            ? "小さな一歩も、プロジェクトの記録に。"
-            : "今日の小さな「つくった」を。"}
-        </p>
+      <div
+        className={`mt-4 flex items-center gap-4 ${isProgress ? "justify-between" : "justify-end"}`}
+      >
+        {isProgress ? (
+          <p className="text-sm text-[#6A7B82]">
+            今日の小さな「つくった」を。
+          </p>
+        ) : null}
         <Button
           type="submit"
           variant="primary"

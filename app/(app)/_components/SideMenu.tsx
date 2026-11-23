@@ -23,7 +23,7 @@ const baseItems: MenuItem[] = [
   { href: "/projects", label: "プロジェクト一覧", icon: Folder },
 ];
 
-const settingsItem: MenuItem = { href: "/settings", label: "アプリ設定", icon: Settings };
+const settingsItem: MenuItem = { href: "/settings", label: "設定", icon: Settings };
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);

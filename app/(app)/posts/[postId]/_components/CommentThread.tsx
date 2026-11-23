@@ -137,7 +137,7 @@ export function CommentThread({
 
       <CommentForm
         postId={postId}
-        placeholder="フィードバックを書く"
+        placeholder="返信をコメント"
         submitLabel="コメントする"
         onSuccess={() => {
           void mutate();

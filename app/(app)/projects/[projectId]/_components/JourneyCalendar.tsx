@@ -67,7 +67,16 @@ export function JourneyCalendar({
       {/* グリッド、月曜始まり。月初・月末の空きマスを埋めて 7 列に揃える */}
       <div className="mt-4 grid grid-cols-7 gap-1 text-center text-xs text-[#6A7B82]">
         {WEEKDAYS.map((label) => (
-          <div key={label} className="py-1 font-medium">
+          <div
+            key={label}
+            className={`py-1 font-medium ${
+              label === "土"
+                ? "text-[#2563EB]"
+                : label === "日"
+                  ? "text-[#DC2626]"
+                  : ""
+            }`}
+          >
             {label}
           </div>
         ))}
@@ -126,10 +135,6 @@ export function JourneyCalendar({
           ));
         })()}
       </div>
-
-      <p className="mt-4 text-xs text-[#6A7B82]">
-        同じ日の投稿もひとつずつ記録。ステータスが変わらない日も、歩みに残ります。
-      </p>
     </section>
   );
 }

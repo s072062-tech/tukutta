@@ -47,20 +47,20 @@ export function PostCard({ post, onFavoriteChange }: PostCardProps) {
           </div>
 
           {post.progress ? (
-            <div className="mt-3 space-y-2">
+            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg bg-[#F3F6F7] px-3 py-2">
               <Link
                 href={`/projects/${post.progress.project.id}`}
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex max-w-full items-center gap-1.5 text-sm text-[#0F6E6B] hover:underline"
+                className="inline-flex max-w-full items-center gap-1 text-xs text-[#0F6E6B] hover:underline"
               >
-                <Folder className="h-4 w-4 shrink-0" aria-hidden />
+                <Folder className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 <span className="truncate">{post.progress.project.name}</span>
-                <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
+                <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
               </Link>
-              <div className="flex flex-wrap items-center gap-2 text-sm text-[#1C2B2E]">
-                <span className="font-medium">{post.progress.taskName}</span>
-                <StatusBadge status={post.progress.status} />
-              </div>
+              <span className="truncate text-xs text-[#0F6E6B]">
+                {post.progress.taskName}
+              </span>
+              <StatusBadge status={post.progress.status} />
             </div>
           ) : null}
 
@@ -79,7 +79,7 @@ export function PostCard({ post, onFavoriteChange }: PostCardProps) {
             <Link
               href={`/posts/${post.id}`}
               onClick={(event) => event.stopPropagation()}
-              className="inline-flex items-center gap-1.5 text-sm text-[#6A7B82] hover:text-[#0F6E6B]"
+              className="inline-flex items-center gap-1.5 text-xs text-[#6A7B82] hover:text-[#0F6E6B]"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
               {post.commentCount > 0 ? `コメント ${post.commentCount}` : "コメント"}

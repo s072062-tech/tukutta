@@ -11,7 +11,7 @@ import { StampBar } from "@/app/_components/common/StampBar";
 import { StatusBadge } from "@/app/_components/common/StatusBadge";
 import { UserNameLink } from "@/app/_components/common/UserNameLink";
 import { formatLongDateTime } from "@/lib/format";
-import { Folder, Pencil } from "lucide-react";
+import { ChevronRight, Folder, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -92,18 +92,19 @@ export function PostDetailBody({
 
             {/* 進捗ならプロジェクト情報表示 */}
             {post.progress ? (
-              <div className="mt-3 space-y-2">
+              <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg bg-[#F3F6F7] px-3 py-2">
                 <Link
                   href={`/projects/${post.progress.project.id}`}
-                  className="inline-flex max-w-full items-center gap-1.5 text-sm text-[#0F6E6B] hover:underline"
+                  className="inline-flex max-w-full items-center gap-1 text-xs text-[#0F6E6B] hover:underline"
                 >
-                  <Folder className="h-4 w-4 shrink-0" aria-hidden />
+                  <Folder className="h-3.5 w-3.5 shrink-0" aria-hidden />
                   <span className="truncate">{post.progress.project.name}</span>
+                  <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 </Link>
-                <div className="flex flex-wrap items-center gap-2 text-sm text-[#1C2B2E]">
-                  <span className="font-medium">{post.progress.taskName}</span>
-                  <StatusBadge status={post.progress.status} />
-                </div>
+                <span className="truncate text-xs text-[#0F6E6B]">
+                  {post.progress.taskName}
+                </span>
+                <StatusBadge status={post.progress.status} />
               </div>
             ) : null}
 
