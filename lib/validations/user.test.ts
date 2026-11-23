@@ -1,6 +1,6 @@
-// createUserSchema の入力検証ユニットテスト
+// createUserSchema / updateMeSchema の入力検証ユニットテスト
 import { USER_NAME_MAX } from "@/lib/constants";
-import { createUserSchema } from "@/lib/validations/user";
+import { createUserSchema, updateMeSchema } from "@/lib/validations/user";
 import { describe, expect, it } from "vitest";
 
 describe("createUserSchema", () => {
@@ -61,5 +61,31 @@ describe("createUserSchema", () => {
     expect(
       createUserSchema.parse({ name: "佐藤", userId: "Sato_Games-1" }),
     ).toEqual({ name: "佐藤", userId: "Sato_Games-1" });
+  });
+});
+
+describe("updateMeSchema", () => {
+  it("空白のみなら必須エラー", () => {
+    const result = updateMeSchema.safeParse({ name: " " });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("ユーザー名を入力してください。");
+    }
+  });
+
+  it("上限超過ならエラー", () => {
+    const result = updateMeSchema.safeParse({ name: "あ".repeat(USER_NAME_MAX + 1) });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe(
+        `ユーザー名は${USER_NAME_MAX}文字以内で入力してください。`,
+      );
+    }
+  });
+
+  it("余分な userId を取り除いて受け入れる", () => {
+    const result = updateMeSchema.parse({ name: "新しい名前", userId: "x" });
+    expect(result).toEqual({ name: "新しい名前" });
+    expect("userId" in result).toBe(false);
   });
 });
