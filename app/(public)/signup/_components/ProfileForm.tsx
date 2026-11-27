@@ -93,7 +93,7 @@ export function ProfileForm() {
       header={<SignupSteps currentStep={2} />}
       title="ユーザー情報を登録"
       badge={
-        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#E7F3F1] px-3 py-1 text-xs font-medium text-[#0F6E6B]">
+        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-fg">
           <Check className="h-3.5 w-3.5" aria-hidden />
           Google認証済み
         </span>

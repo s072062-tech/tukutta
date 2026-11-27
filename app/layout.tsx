@@ -11,8 +11,8 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ja">
-      <body className="min-h-screen antialiased">
+    <html lang="ja" suppressHydrationWarning>
+      <body className="min-h-screen bg-canvas text-fg antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

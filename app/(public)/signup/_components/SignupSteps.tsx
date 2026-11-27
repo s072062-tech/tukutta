@@ -24,8 +24,8 @@ function StepIndex({ n, state }: StepIndexProps) {
       className={clsx(
         "flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium",
         state === "upcoming"
-          ? "border border-[#DEE7E9] text-[#6A7B82]"
-          : "bg-[#0F6E6B] text-white",
+          ? "border border-border text-fg-muted"
+          : "bg-accent text-white",
       )}
     >
       {state === "done" ? <Check className="h-3.5 w-3.5" aria-hidden /> : n}
@@ -44,7 +44,7 @@ function StepLabel({ n, state, label }: StepLabelProps) {
   return (
     <span className="inline-flex items-center gap-2 whitespace-nowrap">
       <StepIndex n={n} state={state} />
-      <span className={state === "active" ? "font-medium text-[#0F6E6B]" : "text-[#6A7B82]"}>
+      <span className={state === "active" ? "font-medium text-accent-fg" : "text-fg-muted"}>
         {label}
       </span>
     </span>
@@ -56,7 +56,7 @@ export function SignupSteps({ currentStep }: SignupStepsProps) {
   return (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-xs sm:text-sm" aria-label="登録ステップ">
       <StepLabel n={1} state={currentStep === 1 ? "active" : "done"} label="Google認証" />
-      <span className="h-px w-6 bg-[#DEE7E9]" aria-hidden />
+      <span className="h-px w-6 bg-border" aria-hidden />
       <StepLabel n={2} state={currentStep === 2 ? "active" : "upcoming"} label="ユーザー情報登録" />
     </div>
   );

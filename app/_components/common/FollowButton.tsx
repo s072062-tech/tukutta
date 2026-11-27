@@ -71,7 +71,7 @@ export function FollowButton({ userId, isFollowing, onChange }: FollowButtonProp
         {following ? "フォロー中" : "フォロー"}
       </Button>
       {errorMessage ? (
-        <p className="absolute right-0 top-full mt-1 whitespace-nowrap text-xs text-[#B42318]">
+        <p className="absolute right-0 top-full mt-1 whitespace-nowrap text-xs text-danger">
           {errorMessage}
         </p>
       ) : null}

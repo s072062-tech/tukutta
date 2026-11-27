@@ -27,7 +27,7 @@ export function ProjectSearchInput({ value, onChange, onSubmit }: ProjectSearchI
   return (
     <div className="relative">
       <Search
-        className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#8A9AA0]"
+        className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-fg-subtle"
         aria-hidden
       />
       <TextInput

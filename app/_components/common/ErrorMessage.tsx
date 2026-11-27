@@ -11,7 +11,7 @@ type ErrorMessageProps = {
 // messageをアラート表示し、onRetryが有効だと再読み込みボタンを出す
 export function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
   return (
-    <div role="alert" className="rounded-lg bg-[#FDECEC] px-4 py-3 text-sm text-[#B42318]">
+    <div role="alert" className="rounded-lg bg-danger-soft px-4 py-3 text-sm text-danger">
       <p>{message}</p>
       {onRetry ? (
         <Button type="button" variant="ghost" className="mt-2 h-9 px-2" onClick={onRetry}>

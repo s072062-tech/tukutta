@@ -72,8 +72,8 @@ export function TaskEditView({ projectId, taskId, enabled }: TaskEditViewProps) 
   if (isForbidden) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm text-[#1C2B2E]">このタスクを編集する権限がありません</p>
-        <Link href={`/projects/${projectId}`} className="text-sm text-[#0F6E6B] underline">
+        <p className="text-sm text-fg">このタスクを編集する権限がありません</p>
+        <Link href={`/projects/${projectId}`} className="text-sm text-accent-fg underline">
           プロジェクト情報へ
         </Link>
       </div>
@@ -137,7 +137,7 @@ export function TaskEditView({ projectId, taskId, enabled }: TaskEditViewProps) 
 
   return (
     <div className="mx-auto w-full max-w-xl">
-      <div className="rounded-2xl border border-[#DEE7E9] bg-white p-5">
+      <div className="rounded-2xl border border-border bg-surface p-5">
         <TaskEditForm
           projectName={task.project.name}
           projectId={task.project.id}
@@ -151,7 +151,7 @@ export function TaskEditView({ projectId, taskId, enabled }: TaskEditViewProps) 
           }}
         />
         {deleteError ? (
-          <p role="alert" className="mt-3 text-sm text-[#B42318]">
+          <p role="alert" className="mt-3 text-sm text-danger">
             {deleteError}
           </p>
         ) : null}

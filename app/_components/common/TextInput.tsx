@@ -15,8 +15,8 @@ export function TextInput({ hasError = false, className, ref, ...props }: TextIn
     <input
       ref={ref}
       className={clsx(
-        "h-11 w-full rounded-lg border bg-white px-3 text-sm text-[#1C2B2E] outline-none placeholder:text-[#8A9AA0] focus:border-[#0F6E6B]",
-        hasError ? "border-[#B42318]" : "border-[#DEE7E9]",
+        "h-11 w-full rounded-lg border bg-surface px-3 text-sm text-fg outline-none placeholder:text-fg-subtle focus:border-accent",
+        hasError ? "border-danger" : "border-border",
         className,
       )}
       {...props}

@@ -76,13 +76,11 @@ function HomeContent() {
     <div className="px-6 py-8 lg:px-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-bold text-[#1C2B2E]">ホーム</h1>
-
-          <div className="mt-4 lg:hidden">
+          <div className="lg:hidden">
             <PostSearchBox query={q ?? ""} onSearch={handleSearch} />
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 lg:mt-0">
             <PostForm />
           </div>
 

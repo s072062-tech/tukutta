@@ -15,9 +15,10 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variantClassName: Record<ButtonVariant, string> = {
-  primary: "bg-[#0F6E6B] text-white hover:bg-[#0C5C59]",
-  secondary: "border border-[#DEE7E9] bg-white text-[#1C2B2E] hover:bg-[#F3F6F7]",
-  ghost: "text-[#0F6E6B] hover:bg-[#E7F3F1]",
+  primary: "bg-accent text-white hover:bg-accent-hover",
+  secondary:
+    "border border-border bg-surface text-fg hover:bg-surface-muted",
+  ghost: "text-accent-fg hover:bg-accent-soft",
 };
 
 // ボタン種類とクラス名から、ボタン用のTailwind文字列を組み立て

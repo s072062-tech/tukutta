@@ -106,7 +106,7 @@ export function ProfileSettingsForm({ me }: ProfileSettingsFormProps) {
         hint="ユーザーIDは変更できません。"
         htmlFor="userId-display"
       >
-        <p id="userId-display" className="text-sm text-[#1C2B2E]">
+        <p id="userId-display" className="text-sm text-fg">
           @{me.userId}
         </p>
       </FormField> */}
@@ -115,7 +115,7 @@ export function ProfileSettingsForm({ me }: ProfileSettingsFormProps) {
           保存する
         </Button>
         {isSaved ? (
-          <p role="status" className="text-sm font-medium text-[#0F6E6B]">
+          <p role="status" className="text-sm font-medium text-accent-fg">
             保存しました
           </p>
         ) : null}

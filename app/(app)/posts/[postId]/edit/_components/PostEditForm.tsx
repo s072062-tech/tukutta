@@ -210,7 +210,7 @@ export function PostEditForm({
       </FormField>
 
       {formError ? (
-        <p role="alert" className="text-sm text-[#B42318]">
+        <p role="alert" className="text-sm text-danger">
           {formError}
         </p>
       ) : null}

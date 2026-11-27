@@ -32,11 +32,11 @@ export function UserProjectsSection({ userId, isSelf }: UserProjectsSectionProps
 
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-lg font-bold text-[#1C2B2E]">プロジェクト</h2>
+      <h2 className="text-lg font-bold text-fg">プロジェクト</h2>
 
       {isSelf ? (
-        <div className="rounded-2xl border border-[#DEE7E9] bg-white p-5">
-          <h3 className="mb-4 text-sm font-bold text-[#1C2B2E]">プロジェクトを登録</h3>
+        <div className="rounded-2xl border border-border bg-surface p-5">
+          <h3 className="mb-4 text-sm font-bold text-fg">プロジェクトを登録</h3>
           <ProjectForm
             submitLabel="登録する"
             submitIcon={<Plus className="h-4 w-4" />}

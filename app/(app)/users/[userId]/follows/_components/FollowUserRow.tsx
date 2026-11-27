@@ -33,7 +33,7 @@ export function FollowUserRow({ user, onFollowChange }: FollowUserRowProps) {
       role="link"
       tabIndex={0}
       aria-label={`${user.name} ${formatHandle(user.userId)}`}
-      className="flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-[#F7FAFA]"
+      className="flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-surface-muted"
       onClick={goToProfile}
     >
       <Avatar
@@ -44,8 +44,8 @@ export function FollowUserRow({ user, onFollowChange }: FollowUserRowProps) {
         linked={false}
       />
       <div className="min-w-0 flex-1">
-        <p className="truncate font-bold text-[#1C2B2E]">{user.name}</p>
-        <p className="truncate text-sm text-[#6A7B82]">{formatHandle(user.userId)}</p>
+        <p className="truncate font-bold text-fg">{user.name}</p>
+        <p className="truncate text-sm text-fg-muted">{formatHandle(user.userId)}</p>
       </div>
       {!user.isSelf ? (
         <div

@@ -32,7 +32,7 @@ export function HashtagText({ text, linkTo, className }: HashtagTextProps) {
             key={`h-${index}-${segment.name}`}
             href={hashtagHref(linkTo, segment.name)}
             onClick={(event) => event.stopPropagation()}
-            className="text-[#0F6E6B] hover:underline"
+            className="text-accent-fg hover:underline"
           >
             {segment.value}
           </Link>

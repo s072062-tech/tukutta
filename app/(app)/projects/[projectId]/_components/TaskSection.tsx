@@ -23,8 +23,8 @@ export function TaskSection({ projectId, tasks, isOwner, onCreated }: TaskSectio
       ) : null}
 
       <div>
-        <h2 className="text-sm font-semibold text-[#1C2B2E]">タスク {tasks.length}</h2>
-        <p className="mt-1 text-xs text-[#6A7B82]">
+        <h2 className="text-sm font-semibold text-fg">タスク {tasks.length}</h2>
+        <p className="mt-1 text-xs text-fg-muted">
           ステータスは進捗投稿から更新できます
         </p>
       </div>
@@ -32,7 +32,7 @@ export function TaskSection({ projectId, tasks, isOwner, onCreated }: TaskSectio
       {tasks.length === 0 ? (
         <EmptyState message="まだタスクがありません" />
       ) : (
-        <div className="rounded-2xl border border-[#DEE7E9] bg-white px-4">
+        <div className="rounded-2xl border border-border bg-surface px-4">
           {tasks.map((task) => (
             <TaskRow
               key={task.id}

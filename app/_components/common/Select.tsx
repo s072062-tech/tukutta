@@ -15,8 +15,8 @@ export function Select({ hasError = false, className, ref, children, ...props }:
     <select
       ref={ref}
       className={clsx(
-        "h-11 w-full rounded-lg border bg-white px-3 text-sm text-[#1C2B2E] outline-none focus:border-[#0F6E6B] disabled:cursor-not-allowed disabled:bg-[#F3F6F7] disabled:text-[#8A9AA0]",
-        hasError ? "border-[#B42318]" : "border-[#DEE7E9]",
+        "h-11 w-full rounded-lg border bg-surface px-3 text-sm text-fg outline-none focus:border-accent disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-fg-subtle",
+        hasError ? "border-danger" : "border-border",
         className,
       )}
       {...props}

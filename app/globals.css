@@ -1,7 +1,50 @@
 @import "tailwindcss";
 
+/* next-themes が html に付ける .dark で dark: バリアントを効かせる */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* セマンティック色。コンポーネントは hex / bg-white ではなくこれらのユーティリティを使う */
+@theme {
+  --color-canvas: #f3f6f7;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3f6f7;
+  --color-border: #dee7e9;
+  --color-border-strong: #c5d4d8;
+  --color-fg: #1c2b2e;
+  --color-fg-muted: #6a7b82;
+  --color-fg-subtle: #8a9aa0;
+  --color-accent: #0f6e6b;
+  --color-accent-hover: #0c5c59;
+  --color-accent-soft: #e7f3f1;
+  --color-accent-fg: #0f6e6b;
+  --color-danger: #b42318;
+  --color-danger-soft: #fdecec;
+  --color-danger-border: #f5c2c0;
+  --color-skeleton: #e4ebed;
+}
+
+.dark {
+  --color-canvas: #0f1415;
+  --color-surface: #161c1d;
+  --color-surface-muted: #1c2425;
+  --color-border: #2a3537;
+  --color-border-strong: #3a4648;
+  --color-fg: #e8eeee;
+  --color-fg-muted: #9aabb0;
+  --color-fg-subtle: #6a7b82;
+  --color-accent: #0f6e6b;
+  --color-accent-hover: #0c5c59;
+  --color-accent-soft: #1a2f2e;
+  --color-accent-fg: #7bc4c0;
+  --color-danger: #f97066;
+  --color-danger-soft: #3b1a1a;
+  --color-danger-border: #7a2e2e;
+  --color-skeleton: #2a3537;
+}
+
 body {
   margin: 0;
-  color: #1c2b2e;
+  color: var(--color-fg);
+  background-color: var(--color-canvas);
   font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", sans-serif;
 }

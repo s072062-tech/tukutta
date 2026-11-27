@@ -18,7 +18,7 @@ type SegmentedControlProps = {
 export function SegmentedControl({ items, activeKey, onChange }: SegmentedControlProps) {
   return (
     <div
-      className="inline-flex rounded-full border border-[#DEE7E9] bg-[#F3F6F7] p-1"
+      className="inline-flex rounded-full border border-border bg-surface-muted p-1"
       role="group"
     >
       {items.map((item) => {
@@ -31,8 +31,8 @@ export function SegmentedControl({ items, activeKey, onChange }: SegmentedContro
             className={clsx(
               "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
               active
-                ? "bg-white text-[#0F6E6B] shadow-sm"
-                : "text-[#6A7B82] hover:text-[#1C2B2E]",
+                ? "bg-surface text-accent-fg shadow-sm"
+                : "text-fg-muted hover:text-fg",
             )}
             onClick={() => onChange(item.key)}
           >

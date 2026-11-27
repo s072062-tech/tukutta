@@ -29,7 +29,7 @@ export function UserPostsSection({ userId }: UserPostsSectionProps) {
   if (isLoading) {
     return (
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-bold text-[#1C2B2E]">投稿</h2>
+        <h2 className="text-lg font-bold text-fg">投稿</h2>
         <LoadingState variant="list" />
       </section>
     );
@@ -39,7 +39,7 @@ export function UserPostsSection({ userId }: UserPostsSectionProps) {
   if (error) {
     return (
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-bold text-[#1C2B2E]">投稿</h2>
+        <h2 className="text-lg font-bold text-fg">投稿</h2>
         <ErrorMessage
           message={
             error instanceof ApiClientError
@@ -55,7 +55,7 @@ export function UserPostsSection({ userId }: UserPostsSectionProps) {
   // PostCardListに取得した情報を渡して表示
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-lg font-bold text-[#1C2B2E]">投稿</h2>
+      <h2 className="text-lg font-bold text-fg">投稿</h2>
       <PostCardList
         posts={posts}
         emptyMessage="まだ投稿がありません"

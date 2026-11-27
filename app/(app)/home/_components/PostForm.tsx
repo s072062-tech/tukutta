@@ -201,7 +201,7 @@ export function PostForm() {
 
   return (
     <form
-      className="rounded-2xl border border-[#DEE7E9] bg-white p-5 shadow-sm"
+      className="rounded-2xl border border-border bg-surface p-5 shadow-sm"
       onSubmit={submit}
       noValidate
     >
@@ -248,7 +248,7 @@ export function PostForm() {
             <TextArea
               id="post-body"
               rows={4}
-              placeholder="いま作っていることを書く"
+              placeholder="いまなにしてる？"
               hasError={Boolean(errors.body)}
               {...register("body")}
             />
@@ -258,30 +258,32 @@ export function PostForm() {
             <TextArea
               id="post-body"
               rows={4}
-              placeholder="いま作っていることを書く"
+              placeholder="いまなにしてる？"
               hasError={Boolean(errors.body)}
               aria-label="本文"
               {...register("body")}
             />
             {errors.body?.message ? (
-              <p className="text-sm text-[#B42318]">{errors.body.message}</p>
+              <p className="text-sm text-danger">{errors.body.message}</p>
             ) : null}
           </div>
         )}
       </div>
 
       {formError ? (
-        <p role="alert" className="mt-3 text-sm text-[#B42318]">
+        <p role="alert" className="mt-3 text-sm text-danger">
           {formError}
         </p>
       ) : null}
 
-      <div className="mt-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-[#6A7B82]">
-          {isProgress
-            ? "小さな一歩も、プロジェクトの記録に。"
-            : "今日の小さな「つくった」を。"}
-        </p>
+      <div
+        className={`mt-4 flex items-center gap-4 ${isProgress ? "justify-between" : "justify-end"}`}
+      >
+        {isProgress ? (
+          <p className="text-sm text-fg-muted">
+            今日の小さな「つくった」を。
+          </p>
+        ) : null}
         <Button
           type="submit"
           variant="primary"

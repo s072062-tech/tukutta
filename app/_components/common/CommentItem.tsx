@@ -41,15 +41,15 @@ export function CommentItem({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             <UserNameLink user={comment.author} />
-            <time className="text-xs text-[#8A9AA0]" dateTime={comment.createdAt}>
+            <time className="text-xs text-fg-subtle" dateTime={comment.createdAt}>
               {formatLongDateTime(comment.createdAt)}
             </time>
           </div>
-          <p className="mt-1 whitespace-pre-wrap text-sm text-[#1C2B2E]">{comment.body}</p>
+          <p className="mt-1 whitespace-pre-wrap text-sm text-fg">{comment.body}</p>
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <button
               type="button"
-              className="text-xs font-medium text-[#0F6E6B] hover:underline"
+              className="text-xs font-medium text-accent-fg hover:underline"
               onClick={() => onReply(comment.id)}
             >
               返信
@@ -57,7 +57,7 @@ export function CommentItem({
             {onDelete && comment.canDelete ? (
               <button
                 type="button"
-                className="text-xs font-medium text-[#6A7B82] hover:underline"
+                className="text-xs font-medium text-fg-muted hover:underline"
                 onClick={() => onDelete(comment.id)}
               >
                 削除

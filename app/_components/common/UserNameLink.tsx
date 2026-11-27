@@ -11,8 +11,8 @@ type UserNameLinkProps = {
 export function UserNameLink({ user }: UserNameLinkProps) {
   return (
     <Link href={`/users/${user.userId}`} className="block min-w-0">
-      <span className="block truncate text-sm font-medium text-[#1C2B2E]">{user.name}</span>
-      <span className="block truncate text-xs text-[#6A7B82]">@{user.userId}</span>
+      <span className="block truncate text-sm font-medium text-fg">{user.name}</span>
+      <span className="block truncate text-xs text-fg-muted">@{user.userId}</span>
     </Link>
   );
 }

@@ -134,7 +134,7 @@ export function ProjectListView() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-8">
-      <h1 className="text-xl font-bold text-[#1C2B2E]">プロジェクト一覧</h1>
+      <h1 className="text-xl font-bold text-fg">プロジェクト一覧</h1>
 
       <div className="mt-6">
         <Tabs
@@ -169,7 +169,7 @@ export function ProjectListView() {
       {!showAuthRedirect && !showListLoading && !showError ? (
         <div className="mt-6 space-y-3">
           {total != null && total >= 1 ? (
-            <p className="text-sm text-[#6A7B82]">{total}件のプロジェクト</p>
+            <p className="text-sm text-fg-muted">{total}件のプロジェクト</p>
           ) : null}
           {projects.length === 0 ? (
             <EmptyState message={emptyMessage(tab, q)} />

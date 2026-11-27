@@ -176,7 +176,7 @@ export function ProjectDetailView({
       if (journeyLoading || !journey) {
         return (
           <div className="flex flex-col gap-3">
-            <p className="text-sm font-semibold text-[#1C2B2E]">
+            <p className="text-sm font-semibold text-fg">
               {year}年{month}月
             </p>
             {journeyError ? (
