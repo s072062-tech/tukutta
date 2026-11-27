@@ -24,7 +24,7 @@ export function PostCard({ post, onFavoriteChange }: PostCardProps) {
 
   return (
     <article
-      className="cursor-pointer rounded-2xl border border-[#DEE7E9] bg-white p-4 transition-colors hover:border-[#C5D4D8]"
+      className="cursor-pointer rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-border-strong"
       onClick={() => router.push(`/posts/${post.id}`)}
     >
       <div className="flex items-start gap-3">
@@ -41,30 +41,30 @@ export function PostCard({ post, onFavoriteChange }: PostCardProps) {
             <div onClick={(event) => event.stopPropagation()}>
               <UserNameLink user={post.author} />
             </div>
-            <time className="text-xs text-[#6A7B82]" dateTime={post.createdAt}>
+            <time className="text-xs text-fg-muted" dateTime={post.createdAt}>
               {formatShortDateTime(post.createdAt)}
             </time>
           </div>
 
           {post.progress ? (
-            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg bg-[#F3F6F7] px-3 py-2">
+            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg bg-surface-muted px-3 py-2">
               <Link
                 href={`/projects/${post.progress.project.id}`}
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex max-w-full items-center gap-1 text-xs text-[#0F6E6B] hover:underline"
+                className="inline-flex max-w-full items-center gap-1 text-xs text-accent-fg hover:underline"
               >
                 <Folder className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 <span className="truncate">{post.progress.project.name}</span>
                 <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
               </Link>
-              <span className="truncate text-xs text-[#0F6E6B]">
+              <span className="truncate text-xs text-accent-fg">
                 {post.progress.taskName}
               </span>
               <StatusBadge status={post.progress.status} />
             </div>
           ) : null}
 
-          <p className="mt-3 text-sm leading-6 text-[#1C2B2E]">
+          <p className="mt-3 text-sm leading-6 text-fg">
             <HashtagText text={post.body} linkTo="posts" />
           </p>
 
@@ -79,7 +79,7 @@ export function PostCard({ post, onFavoriteChange }: PostCardProps) {
             <Link
               href={`/posts/${post.id}`}
               onClick={(event) => event.stopPropagation()}
-              className="inline-flex items-center gap-1.5 text-xs text-[#6A7B82] hover:text-[#0F6E6B]"
+              className="inline-flex items-center gap-1.5 text-xs text-fg-muted hover:text-accent-fg"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
               {post.commentCount > 0 ? `コメント ${post.commentCount}` : "コメント"}

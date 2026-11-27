@@ -47,7 +47,7 @@ export function LogoutButton() {
         ログアウト
       </Button>
       {error ? (
-        <p role="alert" className="text-sm text-[#B42318]">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       ) : null}

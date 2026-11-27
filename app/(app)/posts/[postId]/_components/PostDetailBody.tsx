@@ -60,12 +60,12 @@ export function PostDetailBody({
       <button
         type="button"
         onClick={handleBack}
-        className="text-sm font-medium text-[#0F6E6B] hover:underline"
+        className="text-sm font-medium text-accent-fg hover:underline"
       >
         ← 戻る
       </button>
 
-      <div className="rounded-2xl border border-[#DEE7E9] bg-white p-5">
+      <div className="rounded-2xl border border-border bg-surface p-5">
         <div className="flex items-start gap-3">
           {/* ユーザーアイコン */}
           <Avatar
@@ -92,16 +92,16 @@ export function PostDetailBody({
 
             {/* 進捗ならプロジェクト情報表示 */}
             {post.progress ? (
-              <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg bg-[#F3F6F7] px-3 py-2">
+              <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg bg-surface-muted px-3 py-2">
                 <Link
                   href={`/projects/${post.progress.project.id}`}
-                  className="inline-flex max-w-full items-center gap-1 text-xs text-[#0F6E6B] hover:underline"
+                  className="inline-flex max-w-full items-center gap-1 text-xs text-accent-fg hover:underline"
                 >
                   <Folder className="h-3.5 w-3.5 shrink-0" aria-hidden />
                   <span className="truncate">{post.progress.project.name}</span>
                   <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 </Link>
-                <span className="truncate text-xs text-[#0F6E6B]">
+                <span className="truncate text-xs text-accent-fg">
                   {post.progress.taskName}
                 </span>
                 <StatusBadge status={post.progress.status} />
@@ -109,13 +109,13 @@ export function PostDetailBody({
             ) : null}
 
             {/* 本文 */}
-            <p className="mt-4 text-base leading-7 text-[#1C2B2E]">
+            <p className="mt-4 text-base leading-7 text-fg">
               <HashtagText text={post.body} linkTo="posts" />
             </p>
 
             {/* 投稿日時 */}
             <time
-              className="mt-3 block text-xs text-[#6A7B82]"
+              className="mt-3 block text-xs text-fg-muted"
               dateTime={post.createdAt}
             >
               {formatLongDateTime(post.createdAt)}
@@ -124,7 +124,7 @@ export function PostDetailBody({
         </div>
 
         {/* お気に入りとスタンプ操作 */}
-        <div className="mt-5 space-y-3 border-t border-[#DEE7E9] pt-4">
+        <div className="mt-5 space-y-3 border-t border-border pt-4">
           <FavoriteButton
             postId={post.id}
             isFavorited={post.isFavorited}
@@ -137,7 +137,7 @@ export function PostDetailBody({
               disabled={stampDisabled}
             />
             {stampError ? (
-              <p className="mt-2 text-sm text-[#B42318]">{stampError}</p>
+              <p className="mt-2 text-sm text-danger">{stampError}</p>
             ) : null}
           </div>
         </div>

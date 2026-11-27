@@ -16,7 +16,7 @@ type TabsProps = {
 
 export function Tabs({ items, activeKey, onChange }: TabsProps) {
   return (
-    <div className="flex gap-6 border-b border-[#DEE7E9]" role="tablist">
+    <div className="flex gap-6 border-b border-border" role="tablist">
       {items.map((item) => {
         const active = item.key === activeKey;
         return (
@@ -28,13 +28,13 @@ export function Tabs({ items, activeKey, onChange }: TabsProps) {
             aria-selected={active}
             className={clsx(
               "relative -mb-px pb-3 text-sm font-medium transition-colors",
-              active ? "text-[#0F6E6B]" : "text-[#6A7B82] hover:text-[#1C2B2E]",
+              active ? "text-accent-fg" : "text-fg-muted hover:text-fg",
             )}
             onClick={() => onChange(item.key)}
           >
             {item.label}
             {active ? (
-              <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-[#0F6E6B]" />
+              <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-accent" />
             ) : null}
           </button>
         );

@@ -69,7 +69,7 @@ export function MuteButton({ userId, isMuted, onChange }: MuteButtonProps) {
         {muted ? "ミュート解除" : "ミュート"}
       </Button>
       {errorMessage ? (
-        <p className="absolute right-0 top-full mt-1 whitespace-nowrap text-xs text-[#B42318]">
+        <p className="absolute right-0 top-full mt-1 whitespace-nowrap text-xs text-danger">
           {errorMessage}
         </p>
       ) : null}

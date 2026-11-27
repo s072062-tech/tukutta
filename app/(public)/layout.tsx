@@ -13,7 +13,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-[#F3F6F7]">
+    <div className="min-h-screen bg-canvas">
       {/* ヘッダー表示、 login と signup で切り替え*/}
       <PublicHeader showLogin={pathname !== "/login"} showSignup={pathname !== "/signup"} />
       <main className="px-4 py-16">{children}</main>

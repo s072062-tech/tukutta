@@ -77,8 +77,8 @@ export default function PostEditPage() {
   if (!post.canEdit) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm text-[#1C2B2E]">この投稿を編集する権限がありません</p>
-        <Link href={`/posts/${post.id}`} className="text-sm text-[#0F6E6B] underline">
+        <p className="text-sm text-fg">この投稿を編集する権限がありません</p>
+        <Link href={`/posts/${post.id}`} className="text-sm text-accent-fg underline">
           投稿詳細へ
         </Link>
       </div>
@@ -110,8 +110,8 @@ export default function PostEditPage() {
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-lg font-bold text-[#1C2B2E]">投稿を編集</h1>
-        <Link href={`/posts/${post.id}`} className="text-sm text-[#0F6E6B] underline">
+        <h1 className="text-lg font-bold text-fg">投稿を編集</h1>
+        <Link href={`/posts/${post.id}`} className="text-sm text-accent-fg underline">
           投稿詳細へ
         </Link>
       </div>
@@ -136,7 +136,7 @@ export default function PostEditPage() {
           削除する
         </Button>
         {deleteError ? (
-          <p role="alert" className="text-sm text-[#B42318]">
+          <p role="alert" className="text-sm text-danger">
             {deleteError}
           </p>
         ) : null}

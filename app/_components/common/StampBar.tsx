@@ -6,6 +6,7 @@ import Picker from "@emoji-mart/react";
 import type { StampSummary } from "@/types/stamp";
 import { clsx } from "clsx";
 import { SmilePlus } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useEffect, useId, useRef, useState } from "react";
 
 type StampBarProps = {
@@ -20,11 +21,13 @@ type EmojiSelectPayload = {
 
 // 件数付き絵文字チップと追加ボタン（emoji-mart）を表示する
 export function StampBar({ stamps, onSend, disabled = false }: StampBarProps) {
+  const { resolvedTheme } = useTheme();
   const [isSending, setIsSending] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const pickerRootRef = useRef<HTMLDivElement>(null);
   const pickerLabelId = useId();
   const controlsDisabled = disabled || isSending;
+  const pickerTheme = resolvedTheme === "dark" ? "dark" : "light";
 
   useEffect(() => {
     if (!isPickerOpen) {
@@ -84,13 +87,13 @@ export function StampBar({ stamps, onSend, disabled = false }: StampBarProps) {
             className={clsx(
               "inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-sm transition-colors",
               sent
-                ? "border-[#0F6E6B] bg-[#E7F3F1] text-[#0F6E6B]"
-                : "border-[#DEE7E9] bg-white text-[#1C2B2E] hover:border-[#C5D4D8]",
+                ? "border-accent bg-accent-soft text-accent-fg"
+                : "border-border bg-surface text-fg hover:border-border-strong",
               buttonDisabled && !sent ? "cursor-not-allowed opacity-60" : null,
             )}
           >
             <span aria-hidden>{stamp.emoji}</span>
-            <span className="text-xs text-[#6A7B82]">{stamp.count}</span>
+            <span className="text-xs text-fg-muted">{stamp.count}</span>
           </button>
         );
       })}
@@ -104,7 +107,7 @@ export function StampBar({ stamps, onSend, disabled = false }: StampBarProps) {
           aria-controls={isPickerOpen ? pickerLabelId : undefined}
           onClick={() => setIsPickerOpen((open) => !open)}
           className={clsx(
-            "inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#DEE7E9] bg-white text-[#1C2B2E] transition-colors hover:border-[#C5D4D8]",
+            "inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface text-fg transition-colors hover:border-border-strong",
             controlsDisabled ? "cursor-not-allowed opacity-60" : null,
           )}
         >
@@ -121,7 +124,7 @@ export function StampBar({ stamps, onSend, disabled = false }: StampBarProps) {
             <Picker
               data={data}
               onEmojiSelect={handleEmojiSelect}
-              theme="light"
+              theme={pickerTheme}
               previewPosition="none"
             />
           </div>

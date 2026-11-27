@@ -14,8 +14,8 @@ export function TextArea({ hasError = false, className, ref, ...props }: TextAre
     <textarea
       ref={ref}
       className={clsx(
-        "w-full rounded-lg border bg-white px-3 py-2 text-sm text-[#1C2B2E] outline-none placeholder:text-[#8A9AA0] focus:border-[#0F6E6B]",
-        hasError ? "border-[#B42318]" : "border-[#DEE7E9]",
+        "w-full rounded-lg border bg-surface px-3 py-2 text-sm text-fg outline-none placeholder:text-fg-subtle focus:border-accent",
+        hasError ? "border-danger" : "border-border",
         className,
       )}
       {...props}

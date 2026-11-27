@@ -108,11 +108,11 @@ export function TaskEditForm({
     <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
       <Link
         href={`/projects/${projectId}`}
-        className="text-sm text-[#0F6E6B] underline"
+        className="text-sm text-accent-fg underline"
       >
         {projectName}
       </Link>
-      <h1 className="text-sm font-bold text-[#1C2B2E]">タスクを編集</h1>
+      <h1 className="text-sm font-bold text-fg">タスクを編集</h1>
 
       <FormField label="タスク名" required htmlFor="task-edit-name" error={errors.name?.message}>
         <TextInput
@@ -124,13 +124,13 @@ export function TaskEditForm({
       </FormField>
 
       <div className="flex flex-col gap-1">
-        <p className="text-sm font-medium text-[#1C2B2E]">現在のステータス</p>
+        <p className="text-sm font-medium text-fg">現在のステータス</p>
         <StatusBadge status={status} />
-        <p className="text-xs text-[#6A7B82]">ステータスは進捗投稿から変えられます</p>
+        <p className="text-xs text-fg-muted">ステータスは進捗投稿から変えられます</p>
       </div>
 
       {formError ? (
-        <p role="alert" className="text-sm text-[#B42318]">
+        <p role="alert" className="text-sm text-danger">
           {formError}
         </p>
       ) : null}

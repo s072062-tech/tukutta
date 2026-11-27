@@ -77,7 +77,7 @@ export function CommentFavoriteButton({
         }}
         className={clsx(
           "inline-flex items-center gap-1.5 text-xs disabled:opacity-60",
-          favorited ? "text-[#0F6E6B]" : "text-[#6A7B82] hover:text-[#0F6E6B]",
+          favorited ? "text-accent-fg" : "text-fg-muted hover:text-accent-fg",
         )}
       >
         <Heart
@@ -88,7 +88,7 @@ export function CommentFavoriteButton({
         お気に入り
       </button>
       {errorMessage ? (
-        <p className="absolute left-0 top-full mt-1 whitespace-nowrap text-xs text-[#B42318]">
+        <p className="absolute left-0 top-full mt-1 whitespace-nowrap text-xs text-danger">
           {errorMessage}
         </p>
       ) : null}

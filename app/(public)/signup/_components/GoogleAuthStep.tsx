@@ -13,7 +13,7 @@ export function GoogleAuthStep() {
       title="Googleで認証する"
       description="Googleアカウントでログインし、次にユーザー名とユーザーIDを登録してください。"
       footer={
-        <Link href="/login" className="text-[#0F6E6B] hover:underline">
+        <Link href="/login" className="text-accent-fg hover:underline">
           登録済みの人はログインへ
         </Link>
       }

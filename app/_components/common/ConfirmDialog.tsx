@@ -52,7 +52,7 @@ export function ConfirmDialog({
   return (
     <dialog
       ref={dialogRef}
-      className="fixed inset-0 m-auto w-[min(100%-2rem,24rem)] rounded-2xl border border-[#DEE7E9] bg-white p-6 text-[#1C2B2E] shadow-lg backdrop:bg-black/40"
+      className="fixed inset-0 m-auto w-[min(100%-2rem,24rem)] rounded-2xl border border-border bg-surface p-6 text-fg shadow-lg backdrop:bg-black/40"
       onCancel={(event) => {
         event.preventDefault();
         if (!isLoading) {
@@ -66,7 +66,7 @@ export function ConfirmDialog({
       }}
     >
       <h2 className="text-base font-semibold">{title}</h2>
-      <p className="mt-2 text-sm whitespace-pre-wrap text-[#6A7B82]">{message}</p>
+      <p className="mt-2 text-sm whitespace-pre-wrap text-fg-muted">{message}</p>
       <div className="mt-6 flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onCancel}>
           キャンセル

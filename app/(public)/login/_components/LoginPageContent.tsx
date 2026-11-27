@@ -29,7 +29,7 @@ export function LoginPageContent() {
       description="Googleアカウントでログインします。"
       alert={alert}
       footer={
-        <Link href="/signup" className="text-[#0F6E6B] hover:underline">
+        <Link href="/signup" className="text-accent-fg hover:underline">
           アカウントが無い人はユーザー登録へ
         </Link>
       }

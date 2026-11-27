@@ -29,3 +29,6 @@ export const TASK_NAME_MAX = 30;
 
 // 一覧の1ページあたり件数
 export const PAGE_SIZE = 20;
+
+// テーマ設定を端末に保存する localStorage キー（DB には持たない）
+export const THEME_STORAGE_KEY = "tukutta-theme";

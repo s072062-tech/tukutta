@@ -29,14 +29,14 @@ export function ProjectHeader({
   stampError = null,
 }: ProjectHeaderProps) {
   return (
-    <section className="rounded-2xl border border-[#DEE7E9] bg-white p-5">
+    <section className="rounded-2xl border border-border bg-surface p-5">
       <div className="flex items-start gap-3">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#E7F3F1] text-[#0F6E6B]">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-fg">
           <Gamepad2 className="h-6 w-6" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
-            <h1 className="text-xl font-semibold text-[#1C2B2E]">{detail.project.name}</h1>
+            <h1 className="text-xl font-semibold text-fg">{detail.project.name}</h1>
             {detail.isOwner ? (
               <Link
                 href={`/projects/${projectId}/edit`}
@@ -54,16 +54,16 @@ export function ProjectHeader({
             )}
           </div>
           {detail.project.description ? (
-            <p className="mt-3 text-sm text-[#1C2B2E]">
+            <p className="mt-3 text-sm text-fg">
               <HashtagText
                 text={detail.project.description}
                 linkTo="projects"
               />
             </p>
           ) : null}
-          <p className="mt-3 text-sm text-[#6A7B82]">
+          <p className="mt-3 text-sm text-fg-muted">
             登録者{" "}
-            <span className="text-[#1C2B2E]">
+            <span className="text-fg">
               <UserNameLink user={detail.owner} />
             </span>
           </p>
@@ -74,7 +74,7 @@ export function ProjectHeader({
               disabled={stampDisabled}
             />
             {stampError ? (
-              <p className="mt-2 text-sm text-[#B42318]">{stampError}</p>
+              <p className="mt-2 text-sm text-danger">{stampError}</p>
             ) : null}
           </div>
         </div>

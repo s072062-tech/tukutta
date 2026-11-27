@@ -87,7 +87,7 @@ function FollowsPageContent() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-8">
       <Link
         href={`/users/${userId}`}
-        className="inline-flex items-center gap-1 text-sm font-medium text-[#0F6E6B] hover:underline"
+        className="inline-flex items-center gap-1 text-sm font-medium text-accent-fg hover:underline"
       >
         <ArrowLeft className="h-4 w-4" aria-hidden />
         {profile.user.name}

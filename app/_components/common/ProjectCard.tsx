@@ -39,17 +39,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <button
       type="button"
       onClick={() => router.push(`/projects/${project.id}`)}
-      className="flex w-full items-center gap-3 rounded-2xl border border-[#DEE7E9] bg-white p-4 text-left transition-colors hover:border-[#C5D4D8]"
+      className="flex w-full items-center gap-3 rounded-2xl border border-border bg-surface p-4 text-left transition-colors hover:border-border-strong"
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E7F3F1] text-[#0F6E6B]">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-fg">
         <Gamepad2 className="h-5 w-5" aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-[#0F6E6B]">{project.name}</p>
-        <p className="mt-0.5 truncate text-xs text-[#6A7B82]">{subtitle}</p>
+        <p className="truncate text-sm font-medium text-accent-fg">{project.name}</p>
+        <p className="mt-0.5 truncate text-xs text-fg-muted">{subtitle}</p>
       </div>
-      <span className="shrink-0 text-xs text-[#6A7B82]">{formatTaskSummary(project.taskCounts)}</span>
-      <ChevronRight className="h-4 w-4 shrink-0 text-[#6A7B82]" aria-hidden />
+      <span className="shrink-0 text-xs text-fg-muted">{formatTaskSummary(project.taskCounts)}</span>
+      <ChevronRight className="h-4 w-4 shrink-0 text-fg-muted" aria-hidden />
     </button>
   );
 }

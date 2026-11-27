@@ -61,10 +61,10 @@ export function ProjectEditView({ projectId, enabled }: ProjectEditViewProps) {
   if (!detail.isOwner) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm text-[#1C2B2E]">このプロジェクトを編集する権限がありません</p>
+        <p className="text-sm text-fg">このプロジェクトを編集する権限がありません</p>
         <Link
           href={`/projects/${detail.project.id}`}
-          className="text-sm text-[#0F6E6B] underline"
+          className="text-sm text-accent-fg underline"
         >
           プロジェクト情報へ
         </Link>
@@ -114,7 +114,7 @@ export function ProjectEditView({ projectId, enabled }: ProjectEditViewProps) {
 
   return (
     <div className="mx-auto w-full max-w-xl">
-      <div className="rounded-2xl border border-[#DEE7E9] bg-white p-5">
+      <div className="rounded-2xl border border-border bg-surface p-5">
         <ProjectForm
           title="プロジェクトを編集"
           submitLabel="保存する"
@@ -138,7 +138,7 @@ export function ProjectEditView({ projectId, enabled }: ProjectEditViewProps) {
           )}
         />
         {deleteError ? (
-          <p role="alert" className="mt-3 text-sm text-[#B42318]">
+          <p role="alert" className="mt-3 text-sm text-danger">
             {deleteError}
           </p>
         ) : null}

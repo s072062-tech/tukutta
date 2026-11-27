@@ -10,7 +10,7 @@ type AppLayoutProps = {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-[#F3F6F7]">
+    <div className="flex min-h-screen bg-canvas">
       <SideMenu />
       <main className="min-w-0 flex-1">{children}</main>
     </div>

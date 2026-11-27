@@ -71,8 +71,8 @@ export function FollowUserList({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#DEE7E9] bg-white">
-      <ul className="divide-y divide-[#DEE7E9]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+      <ul className="divide-y divide-border">
         {users.map((user) => (
           <li key={user.id}>
             <FollowUserRow
@@ -85,7 +85,7 @@ export function FollowUserList({
         ))}
       </ul>
       {hasMore ? (
-        <div className="border-t border-[#DEE7E9] px-4 py-3">
+        <div className="border-t border-border px-4 py-3">
           <LoadMoreButton
             hasMore={hasMore}
             isLoading={isLoadingMore}

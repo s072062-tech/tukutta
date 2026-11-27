@@ -112,7 +112,7 @@ export function ProjectForm({
   return (
     <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
       {title ? (
-        <h1 className="text-sm font-bold text-[#1C2B2E]">{title}</h1>
+        <h1 className="text-sm font-bold text-fg">{title}</h1>
       ) : null}
       <FormField label="プロジェクト名" required htmlFor="project-name" error={errors.name?.message}>
         <TextInput
@@ -136,7 +136,7 @@ export function ProjectForm({
         />
       </FormField>
       {formError ? (
-        <p role="alert" className="text-sm text-[#B42318]">
+        <p role="alert" className="text-sm text-danger">
           {formError}
         </p>
       ) : null}

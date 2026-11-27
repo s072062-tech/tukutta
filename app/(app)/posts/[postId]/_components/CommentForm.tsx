@@ -114,10 +114,10 @@ export function CommentForm({
           {...register("body")}
         />
         {errors.body?.message ? (
-          <p className="text-sm text-[#B42318]">{errors.body.message}</p>
+          <p className="text-sm text-danger">{errors.body.message}</p>
         ) : null}
       </div>
-      {formError ? <p className="text-sm text-[#B42318]">{formError}</p> : null}
+      {formError ? <p className="text-sm text-danger">{formError}</p> : null}
       <div className="flex flex-wrap items-center gap-2">
         <Button type="submit" isLoading={isSubmitting}>
           {submitLabel}

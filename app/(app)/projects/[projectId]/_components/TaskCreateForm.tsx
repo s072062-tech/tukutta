@@ -84,11 +84,11 @@ export function TaskCreateForm({ projectId, onCreated }: TaskCreateFormProps) {
 
   return (
     <form
-      className="rounded-2xl border border-[#DEE7E9] bg-white p-4"
+      className="rounded-2xl border border-border bg-surface p-4"
       onSubmit={submit}
       noValidate
     >
-      <h2 className="text-sm font-semibold text-[#1C2B2E]">タスクを登録</h2>
+      <h2 className="text-sm font-semibold text-fg">タスクを登録</h2>
       <div className="mt-3 flex flex-col gap-3">
         <FormField
           label="タスク名"
@@ -123,7 +123,7 @@ export function TaskCreateForm({ projectId, onCreated }: TaskCreateFormProps) {
             ))}
           </Select>
         </FormField>
-        {formError ? <p className="text-sm text-[#B42318]">{formError}</p> : null}
+        {formError ? <p className="text-sm text-danger">{formError}</p> : null}
         <Button
           type="submit"
           variant="primary"

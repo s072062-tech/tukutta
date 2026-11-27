@@ -17,19 +17,19 @@ export function FormField({ label, required = false, hint, error, htmlFor, child
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center gap-2">
-        <label htmlFor={htmlFor} className="text-sm font-medium text-[#1C2B2E]">
+        <label htmlFor={htmlFor} className="text-sm font-medium text-fg">
           {label}
         </label>
         {required ? (
-          <span className="rounded bg-[#FDECEC] px-1.5 py-0.5 text-xs font-medium text-[#B42318]">
+          <span className="rounded bg-danger-soft px-1.5 py-0.5 text-xs font-medium text-danger">
             必須
           </span>
         ) : null}
       </div>
       {children}
-      {hint ? <p className="text-xs text-[#6A7B82]">{hint}</p> : null}
+      {hint ? <p className="text-xs text-fg-muted">{hint}</p> : null}
       {error ? (
-        <p id={htmlFor ? `${htmlFor}-error` : undefined} className="text-sm text-[#B42318]">
+        <p id={htmlFor ? `${htmlFor}-error` : undefined} className="text-sm text-danger">
           {error}
         </p>
       ) : null}

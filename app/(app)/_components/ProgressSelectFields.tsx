@@ -68,8 +68,8 @@ export function ProgressSelectFields({
   return (
     <div className="flex flex-col gap-4">
       {showEmptyGuide && emptyHref ? (
-        <p className="text-sm text-[#6A7B82]">
-          <Link href={emptyHref} className="text-[#0F6E6B] underline">
+        <p className="text-sm text-fg-muted">
+          <Link href={emptyHref} className="text-accent-fg underline">
             先にプロジェクトとタスクを登録してください
           </Link>
         </p>
