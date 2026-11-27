@@ -37,7 +37,10 @@ describe("DELETE /api/user-self", () => {
 
   async function del() {
     const { DELETE } = await import("./route");
-    return DELETE(new Request("http://localhost:3000/api/user-self", { method: "DELETE" }));
+    return DELETE(
+      new Request("http://localhost:3000/api/user-self", { method: "DELETE" }),
+      { params: Promise.resolve({}) },
+    );
   }
 
   it("未ログインなら 401 を返す", async () => {

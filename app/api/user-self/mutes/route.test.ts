@@ -24,7 +24,9 @@ describe("GET /api/user-self/mutes", () => {
 
   async function get(url = "http://localhost:3000/api/user-self/mutes") {
     const { GET } = await import("./route");
-    return GET(new Request(url));
+    return GET(new Request(url), {
+      params: Promise.resolve({}),
+    });
   }
 
   it("未ログインなら 401 を返す", async () => {
